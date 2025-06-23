@@ -2,6 +2,8 @@
 
 Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Python con una interfaz de línea de comandos colorida e interactiva.
 
+> 💡 **¿Buscas algo más simple?** Tenemos una versión más básica y sencilla disponible en: [https://github.com/GAROS01/YouTube-Download](https://github.com/GAROS01/YouTube-Download)
+
 ## ✨ Características
 
 - 🎥 **Descarga videos** en diferentes calidades (4K, 1080p, 720p, 480p, 360p, etc.)
@@ -18,6 +20,13 @@ Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Py
 - 🔍 **Análisis detallado** de streams disponibles con progreso visual
 - 💡 **Vista previa** de descripciones con opción de ver contenido completo
 - 🔧 **Detección automática de FFmpeg** para fusión de streams
+
+## 🎯 Versiones Disponibles
+
+| Versión | Descripción | Ideal para | Enlace |
+|---------|-------------|------------|--------|
+| **Avanzada** (Esta) | Interfaz completa con múltiples opciones, máxima calidad, barras de progreso avanzadas | Usuarios que quieren todas las funcionalidades | Aquí mismo |
+| **Simple** | Script básico y directo, fácil de usar | Usuarios que prefieren simplicidad | [GitHub - YouTube-Download](https://github.com/GAROS01/YouTube-Download) |
 
 ## 📁 Estructura del Proyecto
 
@@ -94,7 +103,7 @@ El programa presenta un menú interactivo con las siguientes opciones:
 6. **Cambiar directorio de descarga** - Personaliza la carpeta destino 📁
 7. **Ver calidades disponibles** - Muestra todas las opciones de calidad 🎥
 8. **Descarga máxima calidad (separar+fusionar)** - Combina mejor video + mejor audio 🎯
-9. **Salir** - Cierra la aplicación 👋
+0. **Salir** - Cierra la aplicación 👋
 
 ### Ejemplo de uso con máxima calidad
 
@@ -380,6 +389,10 @@ Si encuentras algún problema, por favor abre un issue con:
 - Estado de FFmpeg (si aplica)
 - Mensaje de error completo
 
+## 🔗 Proyectos Relacionados
+
+- **[YouTube-Download (Simple)](https://github.com/GAROS01/YouTube-Download)** - Versión más básica y directa, ideal para uso rápido y sencillo
+
 ## 🔮 Próximas Características
 
 - 🔄 Descarga de playlists completas con máxima calidad
@@ -396,3 +409,8 @@ Si encuentras algún problema, por favor abre un issue con:
 **Desarrollado por GarosDev** 🚀
 
 _Ahora con descarga en máxima calidad combinando video y audio por separado para obtener la mejor experiencia posible_ ✨
+
+### 🌟 Dos Opciones Para Ti
+
+- **¿Quieres todas las funcionalidades?** Usa esta versión avanzada
+- **¿Prefieres simplicidad?** Prueba nuestra [versión simple](https://github.com/GAROS01/YouTube-Download)
