@@ -22,18 +22,18 @@ Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Py
 ```
 youtube-downloader/
 ├── src/
-│   ├── main.py              # Punto de entrada con menú interactivo
+│   ├── main.py                # Punto de entrada con menú interactivo
 │   ├── Class/
-│   │   ├── downloader.py    # Clase principal para descargas
-│   │   └── info.py          # Clase para obtener información de videos
+│   │   ├── downloader.py      # Clase principal para descargas
+│   │   └── info.py            # Clase para obtener información de videos
 │   └── utils/
-│       └── __init__.py      # Funciones utilitarias (validación, formato)
-├── requirements.txt         # Dependencias del proyecto
-├── setup.py                # Configuración del paquete
-├── LICENSE                 # Licencia MIT
-├── .gitignore             # Archivos ignorados por Git
-├── .venv/                 # Entorno virtual (creado localmente)
-└── README.md              # Documentación del proyecto
+│       └── __init__.py        # Funciones utilitarias (validación, formato)
+├── requirements.txt           # Dependencias del proyecto
+├── setup.py                   # Configuración del paquete
+├── LICENSE                    # Licencia MIT
+├── .gitignore                 # Archivos ignorados por Git
+├── .venv/                     # Entorno virtual (creado localmente)
+└── README.md                  # Documentación del proyecto
 ```
 
 ## 🚀 Instalación
@@ -330,29 +330,6 @@ Si encuentras algún problema, por favor abre un issue en el repositorio con:
 - Método de descarga utilizado (yt-dlp o pytubefix)
 - Información de la barra de progreso (si se detuvo)
 
-## 📈 Changelog
-
-### v0.2.0 (Actual)
-
-- ✅ **Barras de progreso avanzadas** con `tqdm` integrado
-- ✅ **Velocidad de descarga** mostrada en tiempo real
-- ✅ **Progreso para análisis** de información de video
-- ✅ **Descarga múltiple** con progreso general e individual
-- ✅ **Callbacks personalizados** para ambos motores
-- ✅ **Interfaz mejorada** con mejor feedback visual
-- ✅ **Tiempo estimado** y estadísticas de descarga
-
-### v0.1.0
-
-- ✅ Implementación de pytubefix en lugar de pytube
-- ✅ Clase VideoInfo separada para mejor organización
-- ✅ Información detallada de streams disponibles
-- ✅ Descripciones interactivas extensas
-- ✅ Soporte para 1080p
-- ✅ Mejor manejo de errores con fallback automático
-- ✅ Interfaz mejorada con más opciones
-- ✅ Documentación completa
-
 ## 🔮 Próximas Características
 
 - 🔄 Descarga de playlists completas con progreso
@@ -365,5 +342,3 @@ Si encuentras algún problema, por favor abre un issue en el repositorio con:
 ---
 
 **Desarrollado por GarosDev** 🚀
-
-_Última actualización: Diciembre 2024 - v0.2.0 con barras de progreso avanzadas_
