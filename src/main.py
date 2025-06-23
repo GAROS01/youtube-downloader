@@ -36,12 +36,14 @@ def main():
                 
             elif choice == '1':
                 url = input(f"{Fore.CYAN}📎 Ingresa la URL del video: {Style.RESET_ALL}").strip()
-                quality = input(f"{Fore.CYAN}🎥 Calidad (best/worst/720p/480p/360p) [best]: {Style.RESET_ALL}").strip() or 'best'
+                print(f"{Fore.YELLOW}Calidades disponibles: best, 1080p, 720p, 480p, 360p, 240p, worst{Style.RESET_ALL}")
+                quality = input(f"{Fore.CYAN}🎥 Calidad [best]: {Style.RESET_ALL}").strip() or 'best'
                 downloader.download_video(url, quality)
                 
             elif choice == '2':
                 url = input(f"{Fore.CYAN}📎 Ingresa la URL del video: {Style.RESET_ALL}").strip()
-                quality = input(f"{Fore.CYAN}🎥 Calidad (highest/lowest/720p/480p/360p) [highest]: {Style.RESET_ALL}").strip() or 'highest'
+                print(f"{Fore.YELLOW}Calidades disponibles: highest, 1080p, 720p, 480p, 360p, 240p, lowest{Style.RESET_ALL}")
+                quality = input(f"{Fore.CYAN}🎥 Calidad [highest]: {Style.RESET_ALL}").strip() or 'highest'
                 downloader.download_video_pytube(url, quality)
                 
             elif choice == '3':

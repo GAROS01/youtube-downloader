@@ -25,10 +25,12 @@ class Downloader:
             return False
 
         try:
-            # Configuración de yt-dlp
+            # Configuración de yt-dlp con mejores opciones de calidad
+            format_selector = self._get_format_selector(quality, audio_only)
+            
             ydl_opts = {
                 'outtmpl': os.path.join(self.download_path, '%(title)s.%(ext)s'),
-                'format': 'bestaudio/best' if audio_only else quality,
+                'format': format_selector,
             }
 
             if audio_only:
@@ -38,7 +40,7 @@ class Downloader:
                     'preferredquality': '192',
                 }]
 
-            print(f"{Fore.CYAN}🔄 Descargando video...{Style.RESET_ALL}")
+            print(f"{Fore.CYAN}🔄 Descargando video en calidad: {quality}...{Style.RESET_ALL}")
             
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([url])
@@ -50,6 +52,23 @@ class Downloader:
             print(f"{Fore.RED}❌ Error durante la descarga: {str(e)}{Style.RESET_ALL}")
             return False
 
+    def _get_format_selector(self, quality, audio_only):
+        """Devuelve el selector de formato apropiado para yt-dlp"""
+        if audio_only:
+            return 'bestaudio/best'
+        
+        quality_map = {
+            'best': 'best[height<=1080]',
+            '1080p': 'best[height<=1080]',
+            '720p': 'best[height<=720]',
+            '480p': 'best[height<=480]',
+            '360p': 'best[height<=360]',
+            '240p': 'best[height<=240]',
+            'worst': 'worst'
+        }
+        
+        return quality_map.get(quality, 'best[height<=1080]')
+
     def download_video_pytube(self, url, quality='highest'):
         """Descarga video usando pytube (alternativo)"""
         if not validate_url(url):
@@ -60,15 +79,12 @@ class Downloader:
             print(f"{Fore.CYAN}🔄 Obteniendo información del video...{Style.RESET_ALL}")
             yt = YouTube(url)
             
-            # Seleccionar stream
-            if quality == 'highest':
+            # Seleccionar stream con más opciones de calidad
+            stream = self._select_pytube_stream(yt, quality)
+            
+            if not stream:
+                print(f"{Fore.YELLOW}⚠️ Calidad {quality} no disponible, usando la mejor disponible{Style.RESET_ALL}")
                 stream = yt.streams.get_highest_resolution()
-            elif quality == 'lowest':
-                stream = yt.streams.get_lowest_resolution()
-            else:
-                stream = yt.streams.filter(res=quality).first()
-                if not stream:
-                    stream = yt.streams.get_highest_resolution()
 
             print(f"{Fore.YELLOW}📹 Título: {yt.title}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}🎥 Calidad: {stream.resolution}{Style.RESET_ALL}")
@@ -83,6 +99,17 @@ class Downloader:
         except Exception as e:
             print(f"{Fore.RED}❌ Error durante la descarga: {str(e)}{Style.RESET_ALL}")
             return False
+
+    def _select_pytube_stream(self, yt, quality):
+        """Selecciona el stream apropiado basado en la calidad especificada"""
+        if quality == 'highest':
+            return yt.streams.get_highest_resolution()
+        elif quality == 'lowest':
+            return yt.streams.get_lowest_resolution()
+        elif quality in ['1080p', '720p', '480p', '360p', '240p']:
+            return yt.streams.filter(res=quality).first()
+        else:
+            return yt.streams.get_highest_resolution()
 
     def get_video_info(self, url):
         """Obtiene información del video"""
@@ -114,3 +141,10 @@ class Downloader:
         except Exception as e:
             print(f"{Fore.RED}❌ Error obteniendo información: {str(e)}{Style.RESET_ALL}")
             return None
+
+    def show_available_qualities(self):
+        """Muestra las calidades disponibles"""
+        qualities = ['best', '1080p', '720p', '480p', '360p', '240p', 'worst']
+        print(f"{Fore.CYAN}🎥 Calidades disponibles:{Style.RESET_ALL}")
+        for quality in qualities:
+            print(f"  • {quality}")
