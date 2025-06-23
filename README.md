@@ -4,7 +4,7 @@ Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Py
 
 ## ✨ Características
 
-- 🎥 **Descarga videos** en diferentes calidades (720p, 480p, 360p, etc.)
+- 🎥 **Descarga videos** en diferentes calidades (1080p, 720p, 480p, 360p, etc.)
 - 🎵 **Extrae audio** en formato MP3
 - 📋 **Información detallada** del video (título, autor, duración, vistas)
 - 🔄 **Dos motores de descarga**: yt-dlp (recomendado) y pytube
@@ -98,7 +98,7 @@ El programa presenta un menú interactivo con las siguientes opciones:
 
 Selecciona una opción (0-5): 1
 📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
-🎥 Calidad (best/worst/720p/480p/360p) [best]: 720p
+🎥 Calidad (best/worst/1080/720p/480p/360p) [best]: 720p
 🔄 Descargando video...
 ✅ Descarga completada exitosamente
 ```
