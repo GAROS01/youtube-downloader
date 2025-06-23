@@ -46,28 +46,12 @@ class Downloader:
                 ydl.download([url])
             
             print(f"{Fore.GREEN}✅ Descarga completada exitosamente{Style.RESET_ALL}")
+            print(f"{Fore.CYAN}📁 Guardado en: {self.download_path}{Style.RESET_ALL}")
             return True
 
         except Exception as e:
             print(f"{Fore.RED}❌ Error durante la descarga: {str(e)}{Style.RESET_ALL}")
             return False
-
-    def _get_format_selector(self, quality, audio_only):
-        """Devuelve el selector de formato apropiado para yt-dlp"""
-        if audio_only:
-            return 'bestaudio/best'
-        
-        quality_map = {
-            'best': 'best[height<=1080]',
-            '1080p': 'best[height<=1080]',
-            '720p': 'best[height<=720]',
-            '480p': 'best[height<=480]',
-            '360p': 'best[height<=360]',
-            '240p': 'best[height<=240]',
-            'worst': 'worst'
-        }
-        
-        return quality_map.get(quality, 'best[height<=1080]')
 
     def download_video_pytube(self, url, quality='highest'):
         """Descarga video usando pytube (alternativo)"""
@@ -94,11 +78,29 @@ class Downloader:
             stream.download(output_path=self.download_path)
             
             print(f"{Fore.GREEN}✅ Descarga completada exitosamente{Style.RESET_ALL}")
+            print(f"{Fore.CYAN}📁 Guardado en: {self.download_path}{Style.RESET_ALL}")
             return True
 
         except Exception as e:
             print(f"{Fore.RED}❌ Error durante la descarga: {str(e)}{Style.RESET_ALL}")
             return False
+
+    def _get_format_selector(self, quality, audio_only):
+        """Devuelve el selector de formato apropiado para yt-dlp"""
+        if audio_only:
+            return 'bestaudio/best'
+        
+        quality_map = {
+            'best': 'best[height<=1080]',
+            '1080p': 'best[height<=1080]',
+            '720p': 'best[height<=720]',
+            '480p': 'best[height<=480]',
+            '360p': 'best[height<=360]',
+            '240p': 'best[height<=240]',
+            'worst': 'worst'
+        }
+        
+        return quality_map.get(quality, 'best[height<=1080]')
 
     def _select_pytube_stream(self, yt, quality):
         """Selecciona el stream apropiado basado en la calidad especificada"""
