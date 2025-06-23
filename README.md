@@ -4,8 +4,9 @@ Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Py
 
 ## ✨ Características
 
-- 🎥 **Descarga videos** en diferentes calidades (1080p, 720p, 480p, 360p, etc.)
-- 🎵 **Extrae audio** en formato MP3 de alta calidad (192 kbps)
+- 🎥 **Descarga videos** en diferentes calidades (4K, 1080p, 720p, 480p, 360p, etc.)
+- 🎵 **Extrae audio** en formato MP3 de alta calidad (320 kbps)
+- 🎯 **Máxima calidad disponible** combinando video y audio por separado
 - 📊 **Barras de progreso avanzadas** con velocidad de descarga y tiempo estimado
 - 📋 **Información detallada** del video con descripciones extensas
 - 🔄 **Dos motores de descarga**: yt-dlp (recomendado) y pytubefix (actualizado)
@@ -16,6 +17,7 @@ Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Py
 - 🛡️ **Manejo robusto de errores** con métodos de respaldo
 - 🔍 **Análisis detallado** de streams disponibles con progreso visual
 - 💡 **Vista previa** de descripciones con opción de ver contenido completo
+- 🔧 **Detección automática de FFmpeg** para fusión de streams
 
 ## 📁 Estructura del Proyecto
 
@@ -84,105 +86,120 @@ python main.py
 
 El programa presenta un menú interactivo con las siguientes opciones:
 
-1. **Descargar video (yt-dlp)** - Método recomendado, más estable y versátil
-2. **Descargar video (pytubefix)** - Método alternativo actualizado y rápido
-3. **Descargar solo audio (MP3)** - Extrae únicamente el audio en alta calidad
-4. **Obtener información del video** - Muestra detalles completos sin descargar
-5. **Descargar múltiples videos** - Descarga varios videos con progreso general
-6. **Cambiar directorio de descarga** - Personaliza la carpeta destino
-7. **Ver calidades disponibles** - Muestra todas las opciones de calidad
-8. **Salir** - Cierra la aplicación
+1. **Descargar video (yt-dlp)** - Método recomendado, máxima calidad 🏆
+2. **Descargar video (pytubefix)** - Método alternativo rápido 🚀
+3. **Descargar solo audio (MP3)** - Extrae únicamente el audio a 320kbps 🎵
+4. **Obtener información del video** - Muestra detalles completos sin descargar 📊
+5. **Descargar múltiples videos** - Descarga varios videos con progreso general 📦
+6. **Cambiar directorio de descarga** - Personaliza la carpeta destino 📁
+7. **Ver calidades disponibles** - Muestra todas las opciones de calidad 🎥
+8. **Descarga máxima calidad (separar+fusionar)** - Combina mejor video + mejor audio 🎯
+9. **Salir** - Cierra la aplicación 👋
 
-### Ejemplo de uso con barra de progreso
+### Ejemplo de uso con máxima calidad
 
 ```
 🎬 DESCARGADOR DE VIDEOS DE YOUTUBE
 =======================================================
-1. Descargar video (yt-dlp) 📥
-2. Descargar video (pytubefix) 🚀
-3. Descargar solo audio (MP3) 🎵
+1. Descargar video (yt-dlp) - Máxima calidad 🏆
+2. Descargar video (pytubefix) - Rápido 🚀
+3. Descargar solo audio (MP3) - 320kbps 🎵
 4. Obtener información del video 📊
 5. Descargar múltiples videos 📦
 6. Cambiar directorio de descarga 📁
 7. Ver calidades disponibles 🎥
+8. Descarga máxima calidad (separar+fusionar) 🎯
 0. Salir 👋
 =======================================================
 
-Selecciona una opción (0-7): 1
+Selecciona una opción (0-8): 1
 📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
-🎥 Calidades disponibles: best, 1080p, 720p, 480p, 360p, 240p, worst
+🎥 Calidades disponibles: best, 2160p, 1440p, 1080p, 720p, 480p, 360p, 240p, worst
 🎬 Calidad [best]: 1080p
 
 🎬 Descargando video en calidad: 1080p...
+📊 Formato: bestvideo[height<=?1080][height>720]+bestaudio/best[height<=?1080]
+🔍 Analizando formatos disponibles...
+📊 Formatos que se descargarán:
+  🎥 Video: 1080p @ 30fps (avc1)
+  🎵 Audio: 160kbps (mp4a)
+
 📥 Descargando ████████████████████████████████████████ 100%  245.8M/245.8M [2.4MB/s]
 ✅ Descarga completada: Tutorial completo de Python 2024.mp4
 🎉 Descarga completada exitosamente
 📁 Guardado en: downloads
 ```
 
-### Información detallada de videos con progreso
+### Descarga en máxima calidad (Opción 8)
 
 ```
+Selecciona una opción (0-8): 8
+📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
+🎯 Esta opción descarga el mejor video + mejor audio y los combina
+
+🎯 Descarga en máxima calidad (video + audio separados)
+📥 Descargando ████████████████████████████████████████ 100%  512.3M/512.3M [3.2MB/s]
+🔧 Fusionando streams con FFmpeg...
+✅ Descarga completada: Tutorial 4K Ultra HD.mp4
+🎉 Descarga completada exitosamente
+📁 Guardado en: downloads
+```
+
+### Audio en máxima calidad
+
+```
+Selecciona una opción (0-8): 3
 📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
 
-🔍 Analizando video ██████████████████████████████████████████ 100%
-🔗 Conectando → 📊 Obteniendo datos → 🎥 Analizando streams → ✅ Completado
-
-============================================================
-📋 INFORMACIÓN DEL VIDEO
-============================================================
-📹 Título: Tutorial completo de Python 2024
-👤 Autor: Canal de Programación
-📺 Canal: https://www.youtube.com/channel/ejemplo
-⏱️ Duración: 15:30
-👁️ Vistas: 1,234,567
-📅 Fecha de publicación: 15/12/2024
-🎥 Calidades disponibles: 1080p, 720p, 480p, 360p
-
-📊 Información de streams disponibles:
-  🎬 Videos progresivos (video + audio):
-    • 720p - 245.8 MB - mp4
-    • 480p - 156.2 MB - mp4
-    • 360p - 98.7 MB - mp4
-
-  🎥 Videos adaptativos (solo video):
-    • 1080p - 312.5 MB - mp4
-    • 720p - 187.3 MB - mp4
-
-  🎵 Audio disponible:
-    • 192 kbps - 28.4 MB - mp4a
-    • 128 kbps - 18.9 MB - mp4a
+🎵 Descargando audio en máxima calidad (320kbps MP3)...
+📥 Descargando ████████████████████████████████████████ 100%  28.4M/28.4M [1.8MB/s]
+🎵 Convirtiendo a MP3 320kbps...
+✅ Descarga completada: Tutorial completo de Python 2024.mp3
+🎉 Descarga completada exitosamente
+📁 Guardado en: downloads
 ```
 
-### Descarga múltiple con progreso
+### Información de calidades disponibles
 
 ```
-Selecciona una opción (0-7): 5
-📝 Ingresa las URLs (presiona Enter sin texto para terminar):
-URL 1: https://www.youtube.com/watch?v=video1
-URL 2: https://www.youtube.com/watch?v=video2
-URL 3: https://www.youtube.com/watch?v=video3
-URL 4: 
+Selecciona una opción (0-8): 7
 
-🎥 Calidades disponibles: best, 1080p, 720p, 480p, 360p, 240p, worst
-🎬 Calidad para todos [best]: 720p
+============================================================
+🎥 CALIDADES Y MÉTODOS DE DESCARGA DISPONIBLES
+============================================================
+📱 Métodos de descarga:
+  1️⃣ yt-dlp (🏆 RECOMENDADO) - Combina mejor video + mejor audio
+  2️⃣ pytubefix - Streams progresivos (limitado pero rápido)
 
-📦 Descargando 3 videos...
-🎬 Videos ████████████████████████████████████████ 3/3 videos
+🎬 Calidades disponibles para yt-dlp:
+  🏆 best     - Máxima calidad disponible (hasta 4K si está disponible)
+  🎬 2160p    - 4K Ultra HD (si está disponible)
+  📺 1440p    - 2K Quad HD (si está disponible)
+  🎥 1080p    - Full HD - Combina video 1080p + mejor audio
+  📱 720p     - HD - Perfecto para móviles y tablets
+  💻 480p     - SD - Buena calidad, menor tamaño
+  📞 360p     - Baja calidad - Para conexiones lentas
+  ⚡ 240p     - Mínima calidad - Máximo ahorro de datos
+  💾 worst    - Peor calidad disponible - Menor tamaño de archivo
 
-📹 Descargando video 1/3
-📥 Descargando ████████████████████████████████████████ 100%  156.2M/156.2M [1.8MB/s]
-✅ Descarga completada: Video Tutorial 1.mp4
+🔧 Características de yt-dlp:
+  ✅ Combina automáticamente video de alta calidad + audio de alta calidad
+  ✅ Soporta formatos hasta 4K y audio hasta 320kbps
+  ✅ Usa FFmpeg para fusionar streams (se instala automáticamente)
+  ✅ Mejor compatibilidad con diferentes tipos de videos
 
-📹 Descargando video 2/3
-📥 Descargando ████████████████████████████████████████ 100%  203.5M/203.5M [2.1MB/s]
-✅ Descarga completada: Video Tutorial 2.mp4
+📊 Características de pytubefix:
+  ⚠️ Solo streams progresivos (video+audio en un solo archivo)
+  ⚠️ Limitado a calidades que YouTube ofrece como progresivos
+  ✅ Más rápido para obtener información del video
+  ✅ No requiere FFmpeg
 
-📹 Descargando video 3/3
-📥 Descargando ████████████████████████████████████████ 100%  189.7M/189.7M [1.9MB/s]
-✅ Descarga completada: Video Tutorial 3.mp4
-
-🎉 Descarga completada: 3/3 videos exitosos
+💡 Recomendaciones:
+  🎯 Para máxima calidad: Usa yt-dlp con 'best' o '1080p'
+  📱 Para dispositivos móviles: '720p' o '480p'
+  💾 Para ahorrar espacio: '360p' o 'worst'
+  🎵 Para solo audio: Usar opción 3 (MP3 a 320kbps)
+============================================================
 ```
 
 ## 📦 Dependencias
@@ -192,6 +209,7 @@ URL 4:
 - **requests** - Peticiones HTTP
 - **colorama** - Colores en terminal
 - **tqdm** - Barras de progreso avanzadas con velocidad y tiempo estimado
+- **FFmpeg** - Fusión de streams de video y audio (se instala automáticamente)
 
 ## 🎨 Características Visuales
 
@@ -203,18 +221,20 @@ URL 4:
 - **Tamaño del archivo**: Descargado/Total en formato legible
 - **Múltiples procesos**: Progreso individual y general para descargas múltiples
 
-### Análisis de Video con Progreso
+### Análisis de Formatos
 
 ```
-🔍 Analizando video ██████████████████████████████████████████ 100%
-🔗 Conectando (20%) → 📊 Obteniendo datos (50%) → 🎥 Analizando streams (75%) → ✅ Completado (100%)
+🔍 Analizando formatos disponibles...
+📊 Formatos que se descargarán:
+  🎥 Video: 1080p @ 60fps (avc1)
+  🎵 Audio: 320kbps (mp4a)
 ```
 
-### Descarga con Información Detallada
+### Detección de FFmpeg
 
 ```
-📥 Descargando ████████████████████████████████████████ 100%  245.8M/245.8M [2.4MB/s]
-▶️ Tiempo transcurrido: 02:15  |  ⏱️ Tiempo restante: 00:00
+🔧 FFmpeg detectado ✅ - Fusión de streams habilitada
+🎯 Máxima calidad disponible: Video 4K + Audio 320kbps
 ```
 
 ## 🔧 Funcionalidades Técnicas
@@ -228,48 +248,76 @@ El programa acepta los siguientes formatos de URL de YouTube:
 - `https://www.youtube.com/embed/VIDEO_ID`
 - `https://www.youtube.com/v/VIDEO_ID`
 
-### Formatos de Descarga
+### Formatos de Descarga Mejorados
 
-- **Video**: MP4 en diferentes resoluciones (1080p, 720p, 480p, 360p, 240p)
-- **Audio**: MP3 con calidad de 192 kbps
-- **Calidades disponibles**: best, 1080p, 720p, 480p, 360p, 240p, worst
+#### Video (yt-dlp)
 
-### Características Avanzadas
+- **4K (2160p)**: Hasta 4K Ultra HD + Audio 320kbps
+- **2K (1440p)**: Quad HD + Audio 320kbps
+- **Full HD (1080p)**: 1080p + Audio 320kbps
+- **HD (720p)**: 720p + Audio 320kbps
+- **SD (480p, 360p, 240p)**: Calidades estándar
 
-- **Progreso en tiempo real**: Barras de progreso con `tqdm` para todas las operaciones
-- **Streams progresivos**: Video y audio en un solo archivo
-- **Streams adaptativos**: Video y audio por separado para mejor calidad
-- **Información de tamaños**: Muestra el tamaño estimado antes de descargar
-- **Fallback inteligente**: Si un método falla, automáticamente usa el alternativo
-- **Descarga múltiple**: Procesa varios videos con progreso general
-- **Callbacks de progreso**: Hooks personalizados para cada motor de descarga
+#### Audio
 
-### Gestión de Archivos
+- **MP3**: 320kbps (máxima calidad)
+- **Formato original**: Mantiene codec original cuando es posible
 
-- Limpieza automática de nombres de archivo
-- Creación automática de directorio de descarga
-- Validación de caracteres especiales
-- Organización por carpetas
+### Características Avanzadas de Calidad
 
-## 🔄 Métodos de Descarga
+- **Fusión de streams**: Combina automáticamente el mejor video + mejor audio
+- **Detección de FFmpeg**: Verifica disponibilidad para fusión de streams
+- **Selección inteligente**: Elige los mejores formatos disponibles
+- **Fallback automático**: Si falla la fusión, usa stream progresivo
+- **Información de formatos**: Muestra qué calidades serán descargadas
+- **Verificación de calidad**: Confirma que se descarga la calidad solicitada
 
-### yt-dlp (Recomendado)
+### Configuraciones de Formato
 
-- ✅ Más estable y confiable
-- ✅ Mejor manejo de restricciones
-- ✅ Actualizaciones frecuentes
-- ✅ Soporte para más formatos
-- ✅ Mejor calidad de video
-- ✅ Barras de progreso nativas integradas
+#### Máxima Calidad (yt-dlp)
 
-### pytubefix (Alternativo)
+```
+best: bestvideo[height<=?1080]+bestaudio/best[height<=?1080]
+1080p: bestvideo[height<=?1080][height>720]+bestaudio/best[height<=?1080]
+720p: bestvideo[height<=?720][height>480]+bestaudio/best[height<=?720]
+```
 
-- ✅ Más rápido para información básica
-- ✅ Interfaz más simple
-- ✅ Mejor para análisis de streams
-- ✅ Actualizado regularmente (2024)
-- ✅ Reemplaza a pytube obsoleto
-- ✅ Callbacks personalizados de progreso
+#### Fusión Automática
+
+- Descarga video de máxima calidad disponible
+- Descarga audio de máxima calidad disponible
+- Fusiona automáticamente con FFmpeg
+- Resultado: Archivo MP4 con máxima calidad de video y audio
+
+## 🔄 Métodos de Descarga Actualizados
+
+### yt-dlp (Recomendado) 🏆
+
+- ✅ **Máxima calidad**: Combina mejor video + mejor audio
+- ✅ **Soporta 4K**: Hasta 2160p cuando está disponible
+- ✅ **Audio 320kbps**: Máxima calidad de audio
+- ✅ **Fusión automática**: Usa FFmpeg para combinar streams
+- ✅ **Más estable**: Mejor manejo de restricciones
+- ✅ **Actualizaciones frecuentes**: Siempre compatible
+- ✅ **Formatos específicos**: Garantiza la calidad solicitada
+
+### pytubefix (Alternativo) 🚀
+
+- ✅ **Rápido**: Descarga directa de streams progresivos
+- ✅ **Simple**: No requiere FFmpeg
+- ✅ **Información rápida**: Análisis veloz de videos
+- ⚠️ **Limitado**: Solo streams que YouTube ofrece como progresivos
+- ⚠️ **Calidad limitada**: Máximo 720p en la mayoría de casos
+
+### Recomendaciones de Uso
+
+| Necesidad      | Método Recomendado | Calidad           | Motivo                       |
+| -------------- | ------------------ | ----------------- | ---------------------------- |
+| Máxima calidad | yt-dlp             | `best` o `1080p`  | Combina mejor video + audio  |
+| 4K/2K          | yt-dlp             | `2160p` o `1440p` | Solo disponible en yt-dlp    |
+| Velocidad      | pytubefix          | `highest`         | Descarga directa             |
+| Audio          | yt-dlp             | Audio only        | MP3 320kbps                  |
+| Móvil          | Cualquiera         | `720p` o `480p`   | Ambos métodos funcionan bien |
 
 ## 🛠️ Desarrollo
 
@@ -279,40 +327,42 @@ El programa acepta los siguientes formatos de URL de YouTube:
 pip install -e ".[dev]"
 ```
 
-### Estructura de clases
+### Estructura de clases actualizadas
 
-- **Downloader**: Clase principal para gestión de descargas con barras de progreso
-- **VideoInfo**: Clase especializada para obtener información con progreso visual
-- **validate_url()**: Función para validar URLs de YouTube
-- **format_filename()**: Función para limpiar nombres de archivo
-- **progress_hook()**: Callback para barras de progreso de yt-dlp
-- **progress_function_pytube()**: Callback para barras de progreso de pytubefix
+- **Downloader**: Clase principal con métodos de máxima calidad
+  - `download_video()`: Descarga con configuración mejorada
+  - `download_best_quality_separate()`: Máxima calidad separando streams
+  - `_get_format_selector_improved()`: Selección optimizada de formatos
+  - `_show_selected_formats()`: Información de formatos a descargar
+  - `_check_ffmpeg()`: Verificación de FFmpeg
+- **VideoInfo**: Información detallada con análisis de calidades
+- **validate_url()**: Validación robusta de URLs
+- **format_filename()**: Limpieza de nombres de archivo
 
-### Arquitectura
+### Nuevas Características Técnicas
 
-- **Separación de responsabilidades**: Cada clase tiene una función específica
-- **Manejo de errores robusto**: Múltiples métodos de respaldo
-- **Interfaz consistente**: API unificada para ambos motores de descarga
-- **Escalabilidad**: Fácil agregar nuevos métodos de descarga
-- **Progreso visual**: Integración completa de `tqdm` en todas las operaciones
+- **Configuración de formatos mejorada**: Garantiza máxima calidad
+- **Detección automática de FFmpeg**: Verifica capacidades de fusión
+- **Información de streams**: Muestra qué se descargará exactamente
+- **Fallback inteligente**: Múltiples opciones de respaldo
+- **Progreso detallado**: Información de cada fase del proceso
 
-## 🎨 Interfaz de Usuario
+## 🎨 Interfaz de Usuario Mejorada
 
-- **Colores dinámicos**: Diferentes colores para diferentes tipos de información
-- **Emojis descriptivos**: Fácil identificación visual de opciones
-- **Barras de progreso**: Visualización en tiempo real del progreso
-- **Mensajes informativos**: Retroalimentación clara del progreso
-- **Interactividad**: Opciones para personalizar la experiencia
-- **Progreso detallado**: Múltiples fases del proceso claramente mostradas
+- **Nuevos iconos**: Diferenciación visual de métodos de calidad
+- **Información de formatos**: Muestra configuración técnica
+- **Advertencias inteligentes**: Informa sobre limitaciones
+- **Progreso detallado**: Múltiples fases claramente mostradas
+- **Colores específicos**: Diferentes colores para cada tipo de información
 
 ## 🤝 Contribuciones
 
 Las contribuciones son bienvenidas. Para contribuir:
 
 1. Fork del repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit de los cambios (`git commit -m 'Add AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
+2. Crea una rama para tu feature (`git checkout -b feature/MaxQuality`)
+3. Commit de los cambios (`git commit -m 'Add MaxQuality feature'`)
+4. Push a la rama (`git push origin feature/MaxQuality`)
 5. Abre un Pull Request
 
 ## 📄 Licencia
@@ -321,24 +371,28 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 ## 🐛 Reporte de Problemas
 
-Si encuentras algún problema, por favor abre un issue en el repositorio con:
+Si encuentras algún problema, por favor abre un issue con:
 
 - Descripción del problema
-- Pasos para reproducir
-- URL del video (si aplica)
+- URL del video
+- Calidad solicitada
+- Método de descarga utilizado
+- Estado de FFmpeg (si aplica)
 - Mensaje de error completo
-- Método de descarga utilizado (yt-dlp o pytubefix)
-- Información de la barra de progreso (si se detuvo)
 
 ## 🔮 Próximas Características
 
-- 🔄 Descarga de playlists completas con progreso
-- 🎵 Más formatos de audio (FLAC, AAC)
-- 📱 Interfaz gráfica con barras de progreso
-- 🌐 Soporte para más plataformas de video
+- 🔄 Descarga de playlists completas con máxima calidad
+- 🎵 Más formatos de audio (FLAC, AAC, OGG)
+- 📱 Interfaz gráfica con control de calidad
+- 🌐 Soporte para más plataformas
 - ⚡ Descarga paralela con múltiples hilos
-- 📊 Estadísticas de descarga y reportes
+- 📊 Estadísticas de calidad y velocidad
+- 🎯 Configuraciones personalizadas de calidad
+- 🔧 Instalación automática de FFmpeg
 
 ---
 
 **Desarrollado por GarosDev** 🚀
+
+_Ahora con descarga en máxima calidad combinando video y audio por separado para obtener la mejor experiencia posible_ ✨
