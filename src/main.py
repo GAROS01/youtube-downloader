@@ -16,13 +16,14 @@ def show_menu():
     print(f"\n{Fore.CYAN}{'='*55}")
     print("🎬 DESCARGADOR DE VIDEOS DE YOUTUBE")
     print(f"{'='*55}{Style.RESET_ALL}")
-    print(f"{Fore.GREEN}1.{Style.RESET_ALL} Descargar video (yt-dlp) 📥")
-    print(f"{Fore.GREEN}2.{Style.RESET_ALL} Descargar video (pytubefix) 🚀")
-    print(f"{Fore.GREEN}3.{Style.RESET_ALL} Descargar solo audio (MP3) 🎵")
+    print(f"{Fore.GREEN}1.{Style.RESET_ALL} Descargar video (yt-dlp) - Máxima calidad 🏆")
+    print(f"{Fore.GREEN}2.{Style.RESET_ALL} Descargar video (pytubefix) - Rápido 🚀")
+    print(f"{Fore.GREEN}3.{Style.RESET_ALL} Descargar solo audio (MP3) - 320kbps 🎵")
     print(f"{Fore.GREEN}4.{Style.RESET_ALL} Obtener información del video 📊")
     print(f"{Fore.GREEN}5.{Style.RESET_ALL} Descargar múltiples videos 📦")
     print(f"{Fore.GREEN}6.{Style.RESET_ALL} Cambiar directorio de descarga 📁")
     print(f"{Fore.GREEN}7.{Style.RESET_ALL} Ver calidades disponibles 🎥")
+    print(f"{Fore.GREEN}8.{Style.RESET_ALL} Descarga máxima calidad (separar+fusionar) 🎯")
     print(f"{Fore.RED}0.{Style.RESET_ALL} Salir 👋")
     print(f"{Fore.CYAN}{'='*55}{Style.RESET_ALL}")
 
@@ -41,7 +42,7 @@ def get_multiple_urls():
 
 def main():
     print(f"{Fore.MAGENTA}🎉 Bienvenido al descargador de videos de YouTube{Style.RESET_ALL}")
-    print(f"{Fore.CYAN}✨ Ahora con barras de progreso mejoradas{Style.RESET_ALL}")
+    print(f"{Fore.CYAN}✨ Ahora con descarga en máxima calidad (video+audio separados){Style.RESET_ALL}")
     
     downloader = Downloader()
     video_info = VideoInfo()
@@ -50,7 +51,7 @@ def main():
         show_menu()
         
         try:
-            choice = input(f"\n{Fore.YELLOW}Selecciona una opción (0-7): {Style.RESET_ALL}").strip()
+            choice = input(f"\n{Fore.YELLOW}Selecciona una opción (0-8): {Style.RESET_ALL}").strip()
             
             if choice == '0':
                 print(f"{Fore.MAGENTA}👋 ¡Gracias por usar el descargador! Adiós{Style.RESET_ALL}")
@@ -58,7 +59,7 @@ def main():
                 
             elif choice == '1':
                 url = input(f"{Fore.CYAN}📎 Ingresa la URL del video: {Style.RESET_ALL}").strip()
-                print(f"{Fore.YELLOW}🎥 Calidades disponibles: best, 1080p, 720p, 480p, 360p, 240p, worst{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}🎥 Calidades disponibles: best, 2160p, 1440p, 1080p, 720p, 480p, 360p, 240p, worst{Style.RESET_ALL}")
                 quality = input(f"{Fore.CYAN}🎬 Calidad [best]: {Style.RESET_ALL}").strip() or 'best'
                 downloader.download_video(url, quality)
                 
@@ -93,10 +94,15 @@ def main():
                     print(f"{Fore.GREEN}✅ Directorio cambiado a: {new_path}{Style.RESET_ALL}")
                     
             elif choice == '7':
-                video_info.show_available_qualities()
+                downloader.show_available_qualities()
+                
+            elif choice == '8':
+                url = input(f"{Fore.CYAN}📎 Ingresa la URL del video: {Style.RESET_ALL}").strip()
+                print(f"{Fore.CYAN}🎯 Esta opción descarga el mejor video + mejor audio y los combina{Style.RESET_ALL}")
+                downloader.download_best_quality_separate(url)
                     
             else:
-                print(f"{Fore.RED}❌ Opción no válida. Por favor, selecciona 0-7{Style.RESET_ALL}")
+                print(f"{Fore.RED}❌ Opción no válida. Por favor, selecciona 0-8{Style.RESET_ALL}")
                 
         except KeyboardInterrupt:
             print(f"\n{Fore.MAGENTA}👋 ¡Operación cancelada! Adiós{Style.RESET_ALL}")

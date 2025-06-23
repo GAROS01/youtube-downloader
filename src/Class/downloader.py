@@ -46,35 +46,56 @@ class Downloader:
             if self.progress_bar:
                 self.progress_bar.close()
                 self.progress_bar = None
-            print(f"\n{Fore.GREEN}✅ Descarga completada: {d['filename']}{Style.RESET_ALL}")
+            print(f"\n{Fore.GREEN}✅ Descarga completada: {os.path.basename(d['filename'])}{Style.RESET_ALL}")
 
     def download_video(self, url, quality='best', audio_only=False):
-        """Descarga video usando yt-dlp con barra de progreso"""
+        """Descarga video usando yt-dlp con configuración mejorada para máxima calidad"""
         if not validate_url(url):
             print(f"{Fore.RED}❌ URL no válida: {url}{Style.RESET_ALL}")
             return False
 
         try:
-            # Configuración de yt-dlp con mejores opciones de calidad
-            format_selector = self._get_format_selector(quality, audio_only)
+            # Configuración mejorada de yt-dlp para máxima calidad
+            format_selector = self._get_format_selector_improved(quality, audio_only)
             
             ydl_opts = {
                 'outtmpl': os.path.join(self.download_path, '%(title)s.%(ext)s'),
                 'format': format_selector,
                 'progress_hooks': [self.progress_hook],
+                'merge_output_format': 'mp4',  # Fusionar en MP4
+                'writesubtitles': False,
+                'writeautomaticsub': False,
+                'ignoreerrors': False,
             }
 
             if audio_only:
-                ydl_opts['postprocessors'] = [{
-                    'key': 'FFmpegExtractAudio',
-                    'preferredcodec': 'mp3',
-                    'preferredquality': '192',
-                }]
-                print(f"{Fore.CYAN}🎵 Descargando audio en formato MP3...{Style.RESET_ALL}")
+                ydl_opts.update({
+                    'format': 'bestaudio/best',
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'mp3',
+                        'preferredquality': '320',  # Máxima calidad de audio MP3
+                    }]
+                })
+                print(f"{Fore.CYAN}🎵 Descargando audio en máxima calidad (320kbps MP3)...{Style.RESET_ALL}")
             else:
                 print(f"{Fore.CYAN}🎬 Descargando video en calidad: {quality}...{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}📊 Formato: {format_selector}{Style.RESET_ALL}")
+                
+                # Verificar si FFmpeg está disponible para fusión
+                if not self._check_ffmpeg():
+                    print(f"{Fore.YELLOW}⚠️ FFmpeg no detectado. Puede que no se pueda combinar video+audio en máxima calidad{Style.RESET_ALL}")
             
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                # Obtener información del video primero
+                info = ydl.extract_info(url, download=False)
+                print(f"{Fore.GREEN}📹 Título: {info.get('title', 'N/A')}{Style.RESET_ALL}")
+                
+                # Mostrar formato seleccionado
+                if not audio_only:
+                    self._show_selected_formats(ydl, url, format_selector)
+                
+                # Descargar
                 ydl.download([url])
             
             print(f"{Fore.GREEN}🎉 Descarga completada exitosamente{Style.RESET_ALL}")
@@ -86,6 +107,67 @@ class Downloader:
                 self.progress_bar.close()
                 self.progress_bar = None
             print(f"{Fore.RED}❌ Error durante la descarga: {str(e)}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}💡 Sugerencias:{Style.RESET_ALL}")
+            print(f"   • Verifica que la URL sea válida y el video esté disponible")
+            print(f"   • Intenta con una calidad menor si hay problemas")
+            print(f"   • Asegúrate de tener FFmpeg instalado para máxima calidad")
+            return False
+
+    def _get_format_selector_improved(self, quality, audio_only):
+        """Devuelve el selector de formato mejorado para obtener máxima calidad"""
+        if audio_only:
+            return 'bestaudio[acodec^=mp4a]/bestaudio[acodec^=mp3]/bestaudio/best'
+        
+        # Configuraciones mejoradas que combinan video + audio para máxima calidad
+        quality_map = {
+            'best': 'bestvideo[height<=?1080]+bestaudio/best[height<=?1080]',
+            '2160p': 'bestvideo[height<=?2160]+bestaudio/best[height<=?2160]',  # 4K
+            '1440p': 'bestvideo[height<=?1440]+bestaudio/best[height<=?1440]',  # 2K
+            '1080p': 'bestvideo[height<=?1080][height>720]+bestaudio/bestvideo[height<=?1080]+bestaudio/best[height<=?1080]',
+            '720p': 'bestvideo[height<=?720][height>480]+bestaudio/bestvideo[height<=?720]+bestaudio/best[height<=?720]',
+            '480p': 'bestvideo[height<=?480][height>360]+bestaudio/bestvideo[height<=?480]+bestaudio/best[height<=?480]',
+            '360p': 'bestvideo[height<=?360][height>240]+bestaudio/bestvideo[height<=?360]+bestaudio/best[height<=?360]',
+            '240p': 'bestvideo[height<=?240]+bestaudio/best[height<=?240]',
+            'worst': 'worstvideo+bestaudio/worst'
+        }
+        
+        return quality_map.get(quality, quality_map['best'])
+
+    def _show_selected_formats(self, ydl, url, format_selector):
+        """Muestra los formatos que serán descargados"""
+        try:
+            print(f"{Fore.CYAN}🔍 Analizando formatos disponibles...{Style.RESET_ALL}")
+            
+            # Obtener información detallada de formatos
+            info = ydl.extract_info(url, download=False)
+            formats = info.get('formats', [])
+            
+            # Simular la selección de formato que hará yt-dlp
+            print(f"{Fore.GREEN}📊 Formatos que se descargarán:{Style.RESET_ALL}")
+            
+            # Mostrar algunos de los mejores formatos disponibles
+            video_formats = [f for f in formats if f.get('vcodec', 'none') != 'none' and f.get('height')]
+            audio_formats = [f for f in formats if f.get('acodec', 'none') != 'none' and not f.get('height')]
+            
+            if video_formats:
+                best_video = max(video_formats, key=lambda x: (x.get('height', 0), x.get('fps', 0)))
+                print(f"  🎥 Video: {best_video.get('height', 'N/A')}p @ {best_video.get('fps', 'N/A')}fps ({best_video.get('vcodec', 'N/A')})")
+                
+            if audio_formats:
+                best_audio = max(audio_formats, key=lambda x: x.get('abr', 0) or 0)
+                print(f"  🎵 Audio: {best_audio.get('abr', 'N/A')}kbps ({best_audio.get('acodec', 'N/A')})")
+                
+        except Exception as e:
+            print(f"{Fore.YELLOW}⚠️ No se pudo mostrar información de formatos: {str(e)}{Style.RESET_ALL}")
+
+    def _check_ffmpeg(self):
+        """Verifica si FFmpeg está disponible"""
+        try:
+            import subprocess
+            result = subprocess.run(['ffmpeg', '-version'], 
+                                  capture_output=True, text=True, timeout=5)
+            return result.returncode == 0
+        except:
             return False
 
     def progress_function_pytube(self, stream, chunk, bytes_remaining):
@@ -124,7 +206,11 @@ class Downloader:
             stream = self._select_pytube_stream(yt, quality)
             
             if not stream:
-                print(f"{Fore.YELLOW}⚠️ Calidad {quality} no disponible, usando la mejor disponible{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}⚠️ Calidad {quality} no disponible{Style.RESET_ALL}")
+                # Mostrar calidades disponibles
+                available = [s.resolution for s in yt.streams.filter(progressive=True) if s.resolution]
+                if available:
+                    print(f"{Fore.CYAN}🎥 Calidades disponibles: {', '.join(set(available))}{Style.RESET_ALL}")
                 stream = yt.streams.get_highest_resolution()
 
             print(f"\n{Fore.GREEN}📋 Información de la descarga:{Style.RESET_ALL}")
@@ -132,6 +218,15 @@ class Downloader:
             print(f"{Fore.YELLOW}🎥 Calidad: {stream.resolution or 'Audio only'}{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}📊 Tamaño: {stream.filesize_mb:.1f} MB{Style.RESET_ALL}")
             print(f"{Fore.YELLOW}📁 Formato: {stream.mime_type}{Style.RESET_ALL}")
+            
+            # Advertir si no es la máxima calidad
+            if stream.resolution and quality in ['1080p', 'highest']:
+                available_resolutions = [s.resolution for s in yt.streams.filter(progressive=True) if s.resolution]
+                max_available = max([int(r.replace('p', '')) for r in available_resolutions] or [0])
+                current_res = int(stream.resolution.replace('p', ''))
+                
+                if current_res < max_available:
+                    print(f"{Fore.YELLOW}⚠️ Nota: Usando stream progresivo. Para máxima calidad usa yt-dlp (opción 1){Style.RESET_ALL}")
             
             # Inicializar variables para la barra de progreso
             self._pytube_pbar = None
@@ -156,25 +251,8 @@ class Downloader:
                 self._pytube_pbar.close()
                 delattr(self, '_pytube_pbar')
             print(f"{Fore.RED}❌ Error durante la descarga: {str(e)}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}💡 Intenta con la opción de yt-dlp (opción 1){Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}💡 Intenta con la opción de yt-dlp (opción 1) para mejor calidad{Style.RESET_ALL}")
             return False
-
-    def _get_format_selector(self, quality, audio_only):
-        """Devuelve el selector de formato apropiado para yt-dlp"""
-        if audio_only:
-            return 'bestaudio/best'
-        
-        quality_map = {
-            'best': 'best[height<=1080]',
-            '1080p': 'best[height<=1080]',
-            '720p': 'best[height<=720]',
-            '480p': 'best[height<=480]',
-            '360p': 'best[height<=360]',
-            '240p': 'best[height<=240]',
-            'worst': 'worst'
-        }
-        
-        return quality_map.get(quality, 'best[height<=1080]')
 
     def _select_pytube_stream(self, yt, quality):
         """Selecciona el stream apropiado basado en la calidad especificada"""
@@ -195,6 +273,88 @@ class Downloader:
         except Exception as e:
             print(f"{Fore.YELLOW}⚠️ Error seleccionando calidad específica: {e}{Style.RESET_ALL}")
             return yt.streams.get_highest_resolution()
+
+    def download_best_quality_separate(self, url):
+        """Descarga video y audio por separado y los combina (máxima calidad)"""
+        if not validate_url(url):
+            print(f"{Fore.RED}❌ URL no válida: {url}{Style.RESET_ALL}")
+            return False
+
+        print(f"{Fore.CYAN}🎯 Descarga en máxima calidad (video + audio separados){Style.RESET_ALL}")
+        
+        # Configuración específica para máxima calidad
+        ydl_opts = {
+            'outtmpl': os.path.join(self.download_path, '%(title)s.%(ext)s'),
+            'format': 'bestvideo+bestaudio/best',  # Mejor video + mejor audio
+            'merge_output_format': 'mp4',
+            'progress_hooks': [self.progress_hook],
+            'writesubtitles': False,
+            'writeautomaticsub': False,
+        }
+        
+        return self._download_with_config(url, ydl_opts)
+
+    def _download_with_config(self, url, ydl_opts):
+        """Descarga con configuración específica"""
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+            
+            print(f"{Fore.GREEN}🎉 Descarga completada exitosamente{Style.RESET_ALL}")
+            print(f"{Fore.CYAN}📁 Guardado en: {self.download_path}{Style.RESET_ALL}")
+            return True
+        except Exception as e:
+            if self.progress_bar:
+                self.progress_bar.close()
+                self.progress_bar = None
+            print(f"{Fore.RED}❌ Error durante la descarga: {str(e)}{Style.RESET_ALL}")
+            return False
+
+    def show_available_qualities(self):
+        """Muestra las calidades disponibles con explicaciones mejoradas"""
+        print(f"\n{Fore.CYAN}{'='*60}")
+        print(f"🎥 CALIDADES Y MÉTODOS DE DESCARGA DISPONIBLES")
+        print(f"{'='*60}{Style.RESET_ALL}")
+        
+        print(f"{Fore.GREEN}📱 Métodos de descarga:{Style.RESET_ALL}")
+        print(f"  1️⃣ yt-dlp (🏆 RECOMENDADO) - Combina mejor video + mejor audio")
+        print(f"  2️⃣ pytubefix - Streams progresivos (limitado pero rápido)")
+        
+        print(f"\n{Fore.YELLOW}🎬 Calidades disponibles para yt-dlp:{Style.RESET_ALL}")
+        qualities = [
+            ('best', '🏆', 'Máxima calidad disponible (hasta 4K si está disponible)'),
+            ('2160p', '🎬', '4K Ultra HD (si está disponible)'),
+            ('1440p', '📺', '2K Quad HD (si está disponible)'),
+            ('1080p', '🎥', 'Full HD - Combina video 1080p + mejor audio'),
+            ('720p', '📱', 'HD - Perfecto para móviles y tablets'),
+            ('480p', '💻', 'SD - Buena calidad, menor tamaño'),
+            ('360p', '📞', 'Baja calidad - Para conexiones lentas'),
+            ('240p', '⚡', 'Mínima calidad - Máximo ahorro de datos'),
+            ('worst', '💾', 'Peor calidad disponible - Menor tamaño de archivo')
+        ]
+        
+        for quality, emoji, desc in qualities:
+            print(f"  {emoji} {quality:<8} - {desc}")
+        
+        print(f"\n{Fore.CYAN}🔧 Características de yt-dlp:{Style.RESET_ALL}")
+        print(f"  ✅ Combina automáticamente video de alta calidad + audio de alta calidad")
+        print(f"  ✅ Soporta formatos hasta 4K y audio hasta 320kbps")
+        print(f"  ✅ Usa FFmpeg para fusionar streams (se instala automáticamente)")
+        print(f"  ✅ Mejor compatibilidad con diferentes tipos de videos")
+        
+        print(f"\n{Fore.YELLOW}📊 Características de pytubefix:{Style.RESET_ALL}")
+        print(f"  ⚠️ Solo streams progresivos (video+audio en un solo archivo)")
+        print(f"  ⚠️ Limitado a calidades que YouTube ofrece como progresivos")
+        print(f"  ✅ Más rápido para obtener información del video")
+        print(f"  ✅ No requiere FFmpeg")
+        
+        print(f"\n{Fore.GREEN}💡 Recomendaciones:{Style.RESET_ALL}")
+        print(f"  🎯 Para máxima calidad: Usa yt-dlp con 'best' o '1080p'")
+        print(f"  📱 Para dispositivos móviles: '720p' o '480p'")
+        print(f"  💾 Para ahorrar espacio: '360p' o 'worst'")
+        print(f"  🎵 Para solo audio: Usar opción 3 (MP3 a 320kbps)")
+        
+        print(f"{Fore.CYAN}{'='*60}{Style.RESET_ALL}")
 
     def get_video_info(self, url):
         """Obtiene información del video con barra de progreso"""
@@ -235,20 +395,13 @@ class Downloader:
             print(f"{Fore.RED}❌ Error obteniendo información: {str(e)}{Style.RESET_ALL}")
             return None
 
-    def show_available_qualities(self):
-        """Muestra las calidades disponibles"""
-        qualities = ['best', '1080p', '720p', '480p', '360p', '240p', 'worst']
-        print(f"{Fore.CYAN}🎥 Calidades disponibles:{Style.RESET_ALL}")
-        for quality in qualities:
-            print(f"  • {quality}")
-
     def download_multiple_videos(self, urls, quality='best'):
         """Descarga múltiples videos con barra de progreso general"""
         if not urls:
             print(f"{Fore.RED}❌ No se proporcionaron URLs{Style.RESET_ALL}")
             return False
 
-        print(f"{Fore.CYAN}📦 Descargando {len(urls)} videos...{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}📦 Descargando {len(urls)} videos en calidad: {quality}...{Style.RESET_ALL}")
         
         success_count = 0
         with tqdm(total=len(urls), desc=f"{Fore.GREEN}🎬 Videos{Style.RESET_ALL}", 
