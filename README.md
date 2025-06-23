@@ -118,7 +118,7 @@ Calidades disponibles: best, 1080p, 720p, 480p, 360p, 240p, worst
 Cuando selecciones la opción 4, obtendrás información completa como:
 
 ```
-📋 INFORMACIÓN DEL VIDEO (PyTubeFix)
+📋 INFORMACIÓN DEL VIDEO
 ============================================================
 📹 Título: Tutorial completo de Python 2024
 👤 Autor: Canal de Programación
@@ -143,11 +143,11 @@ Cuando selecciones la opción 4, obtendrás información completa como:
 
 ## 📦 Dependencias
 
-- **yt-dlp** ≥ 2023.7.6 - Motor principal de descarga, más estable
-- **pytubefix** ≥ 6.10.2 - Motor alternativo actualizado (reemplaza pytube)
-- **requests** ≥ 2.31.0 - Peticiones HTTP
-- **colorama** ≥ 0.4.6 - Colores en terminal
-- **tqdm** ≥ 4.65.0 - Barras de progreso
+- **yt-dlp** - Motor principal de descarga, más estable
+- **pytubefix** - Motor alternativo actualizado (reemplaza pytube)
+- **requests** - Peticiones HTTP
+- **colorama** - Colores en terminal
+- **tqdm** - Barras de progreso
 
 ## 🔧 Funcionalidades Técnicas
 
