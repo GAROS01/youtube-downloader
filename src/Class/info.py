@@ -1,8 +1,10 @@
 import yt_dlp
 from pytubefix import YouTube
 from colorama import Fore, Style, init
+from tqdm import tqdm
 import sys
 import os
+import time
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from utils import validate_url
 
@@ -14,36 +16,53 @@ class VideoInfo:
         pass
 
     def get_video_info(self, url):
-        """Obtiene información del video usando pytubefix (método principal)"""
+        """Obtiene información del video usando pytubefix con barra de progreso"""
         if not validate_url(url):
             print(f"{Fore.RED}❌ URL no válida: {url}{Style.RESET_ALL}")
             return None
 
         try:
-            print(f"{Fore.CYAN}🔄 Obteniendo información del video...{Style.RESET_ALL}")
-            
-            # Usar pytubefix con mejor configuración
-            yt = YouTube(url, use_oauth=False, allow_oauth_cache=True, client='WEB')
-            
-            # Formatear duración
-            duration_str = f"{yt.length // 60}:{yt.length % 60:02d}" if yt.length else "Desconocido"
-            
-            # Obtener calidades disponibles (tanto progresivos como adaptativos)
-            progressive_streams = yt.streams.filter(progressive=True, file_extension='mp4')
-            adaptive_streams = yt.streams.filter(adaptive=True, only_video=True, file_extension='mp4')
-            
-            # Combinar calidades de ambos tipos de streams
-            qualities = set()
-            for stream in progressive_streams:
-                if stream.resolution:
-                    qualities.add(int(stream.resolution.replace('p', '')))
-            
-            for stream in adaptive_streams:
-                if stream.resolution:
-                    qualities.add(int(stream.resolution.replace('p', '')))
-            
-            qualities = sorted(list(qualities), reverse=True)
-            
+            # Barra de progreso para obtener información
+            with tqdm(total=100, desc=f"{Fore.CYAN}🔍 Analizando video{Style.RESET_ALL}", 
+                     bar_format='{l_bar}{bar}| {percentage:3.0f}%', ncols=70) as pbar:
+                
+                pbar.set_description(f"{Fore.CYAN}🔗 Conectando{Style.RESET_ALL}")
+                pbar.update(20)
+                
+                # Usar pytubefix con mejor configuración
+                yt = YouTube(url, use_oauth=False, allow_oauth_cache=True, client='WEB')
+                
+                pbar.set_description(f"{Fore.CYAN}📊 Obteniendo datos{Style.RESET_ALL}")
+                pbar.update(30)
+                
+                # Formatear duración
+                duration_str = f"{yt.length // 60}:{yt.length % 60:02d}" if yt.length else "Desconocido"
+                
+                pbar.set_description(f"{Fore.CYAN}🎥 Analizando streams{Style.RESET_ALL}")
+                pbar.update(25)
+                
+                # Obtener calidades disponibles (tanto progresivos como adaptativos)
+                progressive_streams = yt.streams.filter(progressive=True, file_extension='mp4')
+                adaptive_streams = yt.streams.filter(adaptive=True, only_video=True, file_extension='mp4')
+                
+                # Combinar calidades de ambos tipos de streams
+                qualities = set()
+                for stream in progressive_streams:
+                    if stream.resolution:
+                        qualities.add(int(stream.resolution.replace('p', '')))
+                
+                for stream in adaptive_streams:
+                    if stream.resolution:
+                        qualities.add(int(stream.resolution.replace('p', '')))
+                
+                qualities = sorted(list(qualities), reverse=True)
+                
+                pbar.set_description(f"{Fore.GREEN}✅ Completado{Style.RESET_ALL}")
+                pbar.update(25)
+                
+                # Pequeña pausa para mostrar el progreso completo
+                time.sleep(0.3)
+
             # Mostrar información usando pytubefix
             self._display_video_info_pytubefix(yt, duration_str, qualities)
             
@@ -65,18 +84,29 @@ class VideoInfo:
             return self.get_video_info_ytdlp(url)
 
     def get_video_info_ytdlp(self, url):
-        """Obtiene información del video usando yt-dlp (método de respaldo)"""
+        """Obtiene información del video usando yt-dlp con barra de progreso"""
         try:
-            print(f"{Fore.CYAN}🔄 Obteniendo información del video con yt-dlp...{Style.RESET_ALL}")
-            
-            ydl_opts = {
-                'quiet': True,
-                'no_warnings': True,
-                'extract_flat': False,
-            }
-            
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(url, download=False)
+            # Barra de progreso para yt-dlp
+            with tqdm(total=100, desc=f"{Fore.CYAN}🔍 Analizando con yt-dlp{Style.RESET_ALL}", 
+                     bar_format='{l_bar}{bar}| {percentage:3.0f}%', ncols=70) as pbar:
+                
+                pbar.set_description(f"{Fore.CYAN}⚙️ Configurando{Style.RESET_ALL}")
+                pbar.update(15)
+                
+                ydl_opts = {
+                    'quiet': True,
+                    'no_warnings': True,
+                    'extract_flat': False,
+                }
+                
+                pbar.set_description(f"{Fore.CYAN}🔗 Extrayendo info{Style.RESET_ALL}")
+                pbar.update(35)
+                
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    info = ydl.extract_info(url, download=False)
+                
+                pbar.set_description(f"{Fore.CYAN}📊 Procesando datos{Style.RESET_ALL}")
+                pbar.update(30)
                 
                 # Formatear duración
                 duration = info.get('duration', 0)
@@ -91,20 +121,25 @@ class VideoInfo:
                 
                 qualities = sorted(list(qualities), reverse=True)
                 
-                # Mostrar información usando yt-dlp
-                self._display_video_info_ytdlp(info, duration_str, qualities)
+                pbar.set_description(f"{Fore.GREEN}✅ Completado{Style.RESET_ALL}")
+                pbar.update(20)
                 
-                return {
-                    'title': info.get('title', 'N/A'),
-                    'uploader': info.get('uploader', 'N/A'),
-                    'duration': duration_str,
-                    'view_count': info.get('view_count', 0),
-                    'upload_date': info.get('upload_date', 'N/A'),
-                    'description': info.get('description', ''),
-                    'qualities': qualities,
-                    'channel_url': info.get('channel_url', 'N/A'),
-                    'thumbnail_url': info.get('thumbnail', 'N/A')
-                }
+                time.sleep(0.3)
+
+            # Mostrar información usando yt-dlp
+            self._display_video_info_ytdlp(info, duration_str, qualities)
+            
+            return {
+                'title': info.get('title', 'N/A'),
+                'uploader': info.get('uploader', 'N/A'),
+                'duration': duration_str,
+                'view_count': info.get('view_count', 0),
+                'upload_date': info.get('upload_date', 'N/A'),
+                'description': info.get('description', ''),
+                'qualities': qualities,
+                'channel_url': info.get('channel_url', 'N/A'),
+                'thumbnail_url': info.get('thumbnail', 'N/A')
+            }
 
         except Exception as e:
             print(f"{Fore.RED}❌ Error obteniendo información con yt-dlp: {str(e)}{Style.RESET_ALL}")
