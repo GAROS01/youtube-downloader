@@ -1,8 +1,10 @@
 import os
 import yt_dlp
-from pytube import YouTube
+from pytubefix import YouTube
 from colorama import Fore, Style, init
 from tqdm import tqdm
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from utils import validate_url, format_filename
 
 # Inicializar colorama para Windows
@@ -54,14 +56,16 @@ class Downloader:
             return False
 
     def download_video_pytube(self, url, quality='highest'):
-        """Descarga video usando pytube (alternativo)"""
+        """Descarga video usando pytubefix (alternativo actualizado)"""
         if not validate_url(url):
             print(f"{Fore.RED}❌ URL no válida: {url}{Style.RESET_ALL}")
             return False
 
         try:
-            print(f"{Fore.CYAN}🔄 Obteniendo información del video...{Style.RESET_ALL}")
-            yt = YouTube(url)
+            print(f"{Fore.CYAN}🔄 Obteniendo información del video con pytubefix...{Style.RESET_ALL}")
+            
+            # Crear objeto YouTube con mejor configuración
+            yt = YouTube(url, use_oauth=False, allow_oauth_cache=True, client='WEB')
             
             # Seleccionar stream con más opciones de calidad
             stream = self._select_pytube_stream(yt, quality)
@@ -71,7 +75,8 @@ class Downloader:
                 stream = yt.streams.get_highest_resolution()
 
             print(f"{Fore.YELLOW}📹 Título: {yt.title}{Style.RESET_ALL}")
-            print(f"{Fore.YELLOW}🎥 Calidad: {stream.resolution}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}🎥 Calidad: {stream.resolution or 'Audio only'}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}📊 Tamaño: {stream.filesize_mb:.1f} MB{Style.RESET_ALL}")
             print(f"{Fore.CYAN}🔄 Descargando...{Style.RESET_ALL}")
 
             # Descargar
@@ -83,6 +88,7 @@ class Downloader:
 
         except Exception as e:
             print(f"{Fore.RED}❌ Error durante la descarga: {str(e)}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}💡 Intenta con la opción de yt-dlp (opción 1){Style.RESET_ALL}")
             return False
 
     def _get_format_selector(self, quality, audio_only):
@@ -104,13 +110,22 @@ class Downloader:
 
     def _select_pytube_stream(self, yt, quality):
         """Selecciona el stream apropiado basado en la calidad especificada"""
-        if quality == 'highest':
-            return yt.streams.get_highest_resolution()
-        elif quality == 'lowest':
-            return yt.streams.get_lowest_resolution()
-        elif quality in ['1080p', '720p', '480p', '360p', '240p']:
-            return yt.streams.filter(res=quality).first()
-        else:
+        try:
+            if quality == 'highest':
+                return yt.streams.get_highest_resolution()
+            elif quality == 'lowest':
+                return yt.streams.get_lowest_resolution()
+            elif quality in ['1080p', '720p', '480p', '360p', '240p']:
+                # Primero intentar con streams progresivos
+                stream = yt.streams.filter(res=quality, progressive=True).first()
+                if not stream:
+                    # Si no hay progresivo, intentar con adaptativo
+                    stream = yt.streams.filter(res=quality, adaptive=True).first()
+                return stream
+            else:
+                return yt.streams.get_highest_resolution()
+        except Exception as e:
+            print(f"{Fore.YELLOW}⚠️ Error seleccionando calidad específica: {e}{Style.RESET_ALL}")
             return yt.streams.get_highest_resolution()
 
     def get_video_info(self, url):

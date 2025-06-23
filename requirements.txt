@@ -1,5 +1,5 @@
 yt-dlp>=2025.6.9
-pytube>=15.0.0
+pytubefix>=8.8.4
 requests>=2.31.0
 colorama>=0.4.6
 tqdm>=4.67.1

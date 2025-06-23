@@ -5,11 +5,13 @@ setup(
     version='0.1.0',
     author='GarosDev',
     description='Un descargador de videos de YouTube',
+    long_description=open('README.md', encoding='utf-8').read(),
+    long_description_content_type='text/markdown',
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     install_requires=[
-        'yt-dlp>=2023.7.6',
-        'pytube>=15.0.0',
+        'yt-dlp>=2025.6.9',
+        'pytubefix>=8.8.4',
         'requests>=2.31.0',
         'colorama>=0.4.6',
         'tqdm>=4.65.0',
@@ -38,6 +40,7 @@ setup(
         'Operating System :: OS Independent',
     ],
     python_requires='>=3.9',
+    license='MIT',
     entry_points={
         'console_scripts': [
             'youtube-downloader=youtube_downloader.main:main',
