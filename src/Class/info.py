@@ -114,7 +114,7 @@ class VideoInfo:
     def _display_video_info_pytubefix(self, yt, duration_str, qualities):
         """Muestra la información del video usando datos de pytubefix"""
         print(f"\n{Fore.GREEN}{'='*60}")
-        print(f"📋 INFORMACIÓN DEL VIDEO (PyTubeFix)")
+        print(f"📋 INFORMACIÓN DEL VIDEO")
         print(f"{'='*60}{Style.RESET_ALL}")
         
         print(f"{Fore.YELLOW}📹 Título: {Style.RESET_ALL}{yt.title}")

@@ -17,7 +17,7 @@ def show_menu():
     print("🎬 DESCARGADOR DE VIDEOS DE YOUTUBE")
     print(f"{'='*50}{Style.RESET_ALL}")
     print(f"{Fore.GREEN}1.{Style.RESET_ALL} Descargar video (yt-dlp)")
-    print(f"{Fore.GREEN}2.{Style.RESET_ALL} Descargar video (pytube)")
+    print(f"{Fore.GREEN}2.{Style.RESET_ALL} Descargar video (pytubefix)")
     print(f"{Fore.GREEN}3.{Style.RESET_ALL} Descargar solo audio (MP3)")
     print(f"{Fore.GREEN}4.{Style.RESET_ALL} Obtener información del video")
     print(f"{Fore.GREEN}5.{Style.RESET_ALL} Cambiar directorio de descarga")
