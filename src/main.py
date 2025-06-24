@@ -5,8 +5,8 @@ import sys
 sys.path.append(os.path.dirname(__file__))
 
 from colorama import Fore, Style, init
-from Class.downloader import Downloader
-from Class.info import VideoInfo
+from downloader import Downloader
+from info_video import VideoInfo
 
 # Inicializar colorama
 init()
