@@ -396,22 +396,86 @@ class Downloader:
             return None
 
     def download_multiple_videos(self, urls, quality='best'):
-        """Descarga múltiples videos con barra de progreso general"""
+        """Descarga múltiples videos con barra de progreso general en máxima calidad"""
         if not urls:
             print(f"{Fore.RED}❌ No se proporcionaron URLs{Style.RESET_ALL}")
             return False
 
-        print(f"{Fore.CYAN}📦 Descargando {len(urls)} videos en calidad: {quality}...{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}📦 Descargando {len(urls)} videos en máxima calidad...{Style.RESET_ALL}")
+        print(f"{Fore.YELLOW}🎯 Usando configuración de máxima calidad (video+audio separados){Style.RESET_ALL}")
+        
+        # Configuración de máxima calidad para múltiples descargas
+        ydl_opts = {
+            'outtmpl': os.path.join(self.download_path, '%(title)s.%(ext)s'),
+            'format': 'bestvideo+bestaudio/best',  # Mejor video + mejor audio
+            'merge_output_format': 'mp4',
+            'progress_hooks': [self.progress_hook],
+            'writesubtitles': False,
+            'writeautomaticsub': False,
+            'ignoreerrors': False,  # No ignorar errores para que sepamos cuáles fallaron
+        }
         
         success_count = 0
+        failed_urls = []
+        
         with tqdm(total=len(urls), desc=f"{Fore.GREEN}🎬 Videos{Style.RESET_ALL}", 
                  unit="video", bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} videos') as main_pbar:
             
             for i, url in enumerate(urls, 1):
-                print(f"\n{Fore.YELLOW}📹 Descargando video {i}/{len(urls)}{Style.RESET_ALL}")
-                if self.download_video(url, quality):
+                print(f"\n{Fore.YELLOW}📹 Descargando video {i}/{len(urls)} en máxima calidad{Style.RESET_ALL}")
+                print(f"{Fore.CYAN}🔗 URL: {url}{Style.RESET_ALL}")
+                
+                try:
+                    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                        # Obtener información del video primero
+                        info = ydl.extract_info(url, download=False)
+                        title = info.get('title', 'Video desconocido')[:50]
+                        print(f"{Fore.GREEN}📹 Título: {title}{'...' if len(info.get('title', '')) > 50 else ''}{Style.RESET_ALL}")
+                        
+                        # Mostrar formato que se va a descargar
+                        formats = info.get('formats', [])
+                        video_formats = [f for f in formats if f.get('vcodec', 'none') != 'none' and f.get('height')]
+                        audio_formats = [f for f in formats if f.get('acodec', 'none') != 'none' and not f.get('height')]
+                        
+                        if video_formats and audio_formats:
+                            best_video = max(video_formats, key=lambda x: (x.get('height', 0), x.get('fps', 0)))
+                            best_audio = max(audio_formats, key=lambda x: x.get('abr', 0) or 0)
+                            print(f"{Fore.CYAN}  🎥 Video: {best_video.get('height', 'N/A')}p @ {best_video.get('fps', 'N/A')}fps{Style.RESET_ALL}")
+                            print(f"{Fore.CYAN}  🎵 Audio: {best_audio.get('abr', 'N/A')}kbps{Style.RESET_ALL}")
+                        
+                        # Descargar
+                        ydl.download([url])
+                    
                     success_count += 1
+                    print(f"{Fore.GREEN}✅ Video {i} descargado exitosamente{Style.RESET_ALL}")
+                    
+                except Exception as e:
+                    if self.progress_bar:
+                        self.progress_bar.close()
+                        self.progress_bar = None
+                    failed_urls.append({'url': url, 'error': str(e), 'index': i})
+                    print(f"{Fore.RED}❌ Error descargando video {i}: {str(e)}{Style.RESET_ALL}")
+                
                 main_pbar.update(1)
         
-        print(f"\n{Fore.GREEN}🎉 Descarga completada: {success_count}/{len(urls)} videos exitosos{Style.RESET_ALL}")
+        # Mostrar resumen final
+        print(f"\n{Fore.CYAN}{'='*60}")
+        print(f"📊 RESUMEN DE DESCARGA MÚLTIPLE")
+        print(f"{'='*60}{Style.RESET_ALL}")
+        print(f"{Fore.GREEN}✅ Videos descargados exitosamente: {success_count}/{len(urls)}{Style.RESET_ALL}")
+        
+        if failed_urls:
+            print(f"{Fore.RED}❌ Videos que fallaron: {len(failed_urls)}{Style.RESET_ALL}")
+            print(f"\n{Fore.YELLOW}📋 Lista de errores:{Style.RESET_ALL}")
+            for failed in failed_urls:
+                print(f"  {failed['index']}. {failed['url'][:80]}{'...' if len(failed['url']) > 80 else ''}")
+                print(f"     💥 Error: {failed['error'][:100]}{'...' if len(failed['error']) > 100 else ''}")
+        
+        if success_count > 0:
+            print(f"\n{Fore.GREEN}🎉 Descarga completada con máxima calidad{Style.RESET_ALL}")
+            print(f"{Fore.CYAN}📁 Videos guardados en: {self.download_path}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}💡 Todos los videos fueron descargados con la mejor calidad disponible (video+audio combinados){Style.RESET_ALL}")
+        
+        print(f"{Fore.CYAN}{'='*60}{Style.RESET_ALL}")
+        
         return success_count == len(urls)

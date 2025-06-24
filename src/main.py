@@ -20,7 +20,7 @@ def show_menu():
     print(f"{Fore.GREEN}2.{Style.RESET_ALL} Descargar video (pytubefix) - Rápido 🚀")
     print(f"{Fore.GREEN}3.{Style.RESET_ALL} Descargar solo audio (MP3) - 320kbps 🎵")
     print(f"{Fore.GREEN}4.{Style.RESET_ALL} Obtener información del video 📊")
-    print(f"{Fore.GREEN}5.{Style.RESET_ALL} Descargar múltiples videos 📦")
+    print(f"{Fore.GREEN}5.{Style.RESET_ALL} Descargar múltiples videos - Máxima calidad 🎯📦")
     print(f"{Fore.GREEN}6.{Style.RESET_ALL} Cambiar directorio de descarga 📁")
     print(f"{Fore.GREEN}7.{Style.RESET_ALL} Ver calidades disponibles 🎥")
     print(f"{Fore.GREEN}8.{Style.RESET_ALL} Descarga máxima calidad (separar+fusionar) 🎯")
@@ -80,9 +80,15 @@ def main():
             elif choice == '5':
                 urls = get_multiple_urls()
                 if urls:
-                    print(f"{Fore.YELLOW}🎥 Calidades disponibles: best, 1080p, 720p, 480p, 360p, 240p, worst{Style.RESET_ALL}")
-                    quality = input(f"{Fore.CYAN}🎬 Calidad para todos [best]: {Style.RESET_ALL}").strip() or 'best'
-                    downloader.download_multiple_videos(urls, quality)
+                    print(f"{Fore.CYAN}🎯 Esta opción descarga múltiples videos en máxima calidad (video+audio separados){Style.RESET_ALL}")
+                    print(f"{Fore.YELLOW}📊 Se usará la mejor calidad disponible para cada video{Style.RESET_ALL}")
+                    
+                    # Preguntar si quiere continuar
+                    confirm = input(f"{Fore.CYAN}¿Continuar con la descarga en máxima calidad? (s/n): {Style.RESET_ALL}").strip().lower()
+                    if confirm in ['s', 'si', 'sí', 'y', 'yes']:
+                        downloader.download_multiple_videos(urls)
+                    else:
+                        print(f"{Fore.YELLOW}⚠️ Descarga cancelada{Style.RESET_ALL}")
                 else:
                     print(f"{Fore.YELLOW}⚠️ No se ingresaron URLs{Style.RESET_ALL}")
                 
