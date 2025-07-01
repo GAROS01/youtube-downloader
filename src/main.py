@@ -21,9 +21,10 @@ def show_menu():
     print(f"{Fore.GREEN}3.{Style.RESET_ALL} Descargar solo audio (MP3) - 320kbps 🎵")
     print(f"{Fore.GREEN}4.{Style.RESET_ALL} Obtener información del video 📊")
     print(f"{Fore.GREEN}5.{Style.RESET_ALL} Descargar múltiples videos - Máxima calidad 🎯📦")
-    print(f"{Fore.GREEN}6.{Style.RESET_ALL} Cambiar directorio de descarga 📁")
-    print(f"{Fore.GREEN}7.{Style.RESET_ALL} Ver calidades disponibles 🎥")
-    print(f"{Fore.GREEN}8.{Style.RESET_ALL} Descarga máxima calidad (separar+fusionar) 🎯")
+    print(f"{Fore.GREEN}6.{Style.RESET_ALL} Descargar playlist completa - Automático 🔄📑")
+    print(f"{Fore.GREEN}7.{Style.RESET_ALL} Cambiar directorio de descarga 📁")
+    print(f"{Fore.GREEN}8.{Style.RESET_ALL} Ver calidades disponibles 🎥")
+    print(f"{Fore.GREEN}9.{Style.RESET_ALL} Descarga máxima calidad (separar+fusionar) 🎯")
     print(f"{Fore.RED}0.{Style.RESET_ALL} Salir 👋")
     print(f"{Fore.CYAN}{'='*55}{Style.RESET_ALL}")
 
@@ -51,7 +52,7 @@ def main():
         show_menu()
         
         try:
-            choice = input(f"\n{Fore.YELLOW}Selecciona una opción (0-8): {Style.RESET_ALL}").strip()
+            choice = input(f"\n{Fore.YELLOW}Selecciona una opción (0-9): {Style.RESET_ALL}").strip()
             
             if choice == '0':
                 print(f"{Fore.MAGENTA}👋 ¡Gracias por usar el descargador! Adiós{Style.RESET_ALL}")
@@ -93,22 +94,37 @@ def main():
                     print(f"{Fore.YELLOW}⚠️ No se ingresaron URLs{Style.RESET_ALL}")
                 
             elif choice == '6':
+                playlist_url = input(f"{Fore.CYAN}📎 Ingresa la URL de la playlist: {Style.RESET_ALL}").strip()
+                if playlist_url:
+                    print(f"{Fore.CYAN}🔄 Esta opción descarga todos los videos de la playlist automáticamente{Style.RESET_ALL}")
+                    print(f"{Fore.YELLOW}📊 Se usará la mejor calidad disponible para cada video{Style.RESET_ALL}")
+                    
+                    # Preguntar si quiere continuar
+                    confirm = input(f"{Fore.CYAN}¿Continuar con la descarga de la playlist? (s/n): {Style.RESET_ALL}").strip().lower()
+                    if confirm in ['s', 'si', 'sí', 'y', 'yes']:
+                        downloader.download_playlist(playlist_url)
+                    else:
+                        print(f"{Fore.YELLOW}⚠️ Descarga cancelada{Style.RESET_ALL}")
+                else:
+                    print(f"{Fore.YELLOW}⚠️ No se ingresó URL de playlist{Style.RESET_ALL}")
+                
+            elif choice == '7':
                 new_path = input(f"{Fore.CYAN}📁 Nuevo directorio de descarga [{downloader.download_path}]: {Style.RESET_ALL}").strip()
                 if new_path:
                     downloader.download_path = new_path
                     downloader.create_download_directory()
                     print(f"{Fore.GREEN}✅ Directorio cambiado a: {new_path}{Style.RESET_ALL}")
                     
-            elif choice == '7':
+            elif choice == '8':
                 downloader.show_available_qualities()
                 
-            elif choice == '8':
+            elif choice == '9':
                 url = input(f"{Fore.CYAN}📎 Ingresa la URL del video: {Style.RESET_ALL}").strip()
                 print(f"{Fore.CYAN}🎯 Esta opción descarga el mejor video + mejor audio y los combina{Style.RESET_ALL}")
                 downloader.download_best_quality_separate(url)
                     
             else:
-                print(f"{Fore.RED}❌ Opción no válida. Por favor, selecciona 0-8{Style.RESET_ALL}")
+                print(f"{Fore.RED}❌ Opción no válida. Por favor, selecciona 0-9{Style.RESET_ALL}")
                 
         except KeyboardInterrupt:
             print(f"\n{Fore.MAGENTA}👋 ¡Operación cancelada! Adiós{Style.RESET_ALL}")

@@ -2,16 +2,21 @@ import re
 from urllib.parse import urlparse
 
 def validate_url(url):
-    """Valida si la URL es de YouTube y está bien formada"""
+    """Valida si la URL es de YouTube (video o playlist) y está bien formada"""
     if not url:
         return False
     
-    # Patrones de URLs válidas de YouTube
+    # Patrones de URLs válidas de YouTube (videos y playlists)
     youtube_patterns = [
+        # Videos individuales
         r'(?:https?://)?(?:www\.)?youtube\.com/watch\?v=[\w-]+',
         r'(?:https?://)?(?:www\.)?youtu\.be/[\w-]+',
         r'(?:https?://)?(?:www\.)?youtube\.com/embed/[\w-]+',
-        r'(?:https?://)?(?:www\.)?youtube\.com/v/[\w-]+'
+        r'(?:https?://)?(?:www\.)?youtube\.com/v/[\w-]+',
+        # Playlists
+        r'(?:https?://)?(?:www\.)?youtube\.com/playlist\?list=[\w-]+',
+        r'(?:https?://)?(?:www\.)?youtube\.com/watch\?v=[\w-]+&list=[\w-]+',
+        r'(?:https?://)?(?:www\.)?youtube\.com/watch\?list=[\w-]+',
     ]
     
     for pattern in youtube_patterns:

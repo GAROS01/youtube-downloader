@@ -477,5 +477,169 @@ class Downloader:
             print(f"{Fore.YELLOW}💡 Todos los videos fueron descargados con la mejor calidad disponible (video+audio combinados){Style.RESET_ALL}")
         
         print(f"{Fore.CYAN}{'='*60}{Style.RESET_ALL}")
-        
-        return success_count == len(urls)
+    
+    def download_playlist(self, playlist_url):
+        """Descarga una playlist completa automáticamente en máxima calidad"""
+        if not validate_url(playlist_url):
+            print(f"{Fore.RED}❌ URL de playlist no válida: {playlist_url}{Style.RESET_ALL}")
+            return False
+
+        try:
+            print(f"{Fore.CYAN}🔄 Analizando playlist...{Style.RESET_ALL}")
+            
+            # Configuración para extraer URLs de la playlist
+            ydl_opts_extract = {
+                'extract_flat': True,  # Solo extraer URLs, no descargar
+                'quiet': True,
+            }
+            
+            playlist_info = None
+            playlist_urls = []
+            
+            with yt_dlp.YoutubeDL(ydl_opts_extract) as ydl:
+                playlist_info = ydl.extract_info(playlist_url, download=False)
+                
+                if 'entries' in playlist_info:
+                    playlist_urls = [
+                        f"https://www.youtube.com/watch?v={entry['id']}" 
+                        for entry in playlist_info['entries'] 
+                        if entry and entry.get('id')
+                    ]
+            
+            if not playlist_urls:
+                print(f"{Fore.RED}❌ No se encontraron videos en la playlist{Style.RESET_ALL}")
+                return False
+            
+            playlist_title = playlist_info.get('title', 'Playlist desconocida')
+            uploader = playlist_info.get('uploader', 'Canal desconocido')
+            
+            print(f"\n{Fore.GREEN}📑 Playlist encontrada:{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}📋 Título: {Style.RESET_ALL}{playlist_title}")
+            print(f"{Fore.YELLOW}👤 Canal: {Style.RESET_ALL}{uploader}")
+            print(f"{Fore.YELLOW}🎬 Total de videos: {Style.RESET_ALL}{len(playlist_urls)}")
+            
+            # Crear subdirectorio para la playlist
+            safe_playlist_name = format_filename(playlist_title)
+            playlist_dir = os.path.join(self.download_path, safe_playlist_name)
+            
+            # Guardar directorio original
+            original_path = self.download_path
+            self.download_path = playlist_dir
+            self.create_download_directory()
+            
+            print(f"{Fore.CYAN}📁 Los videos se guardarán en: {playlist_dir}{Style.RESET_ALL}")
+            
+            # Configuración de máxima calidad para la playlist
+            ydl_opts = {
+                'outtmpl': os.path.join(playlist_dir, '%(playlist_index)s - %(title)s.%(ext)s'),
+                'format': 'bestvideo+bestaudio/best',  # Mejor video + mejor audio
+                'merge_output_format': 'mp4',
+                'progress_hooks': [self.progress_hook],
+                'writesubtitles': False,
+                'writeautomaticsub': False,
+                'ignoreerrors': True,  # Continuar si algún video falla
+            }
+            
+            success_count = 0
+            failed_videos = []
+            
+            print(f"\n{Fore.CYAN}🚀 Iniciando descarga de playlist en máxima calidad...{Style.RESET_ALL}")
+            
+            with tqdm(total=len(playlist_urls), desc=f"{Fore.GREEN}🎬 Playlist{Style.RESET_ALL}", 
+                     unit="video", bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} videos') as main_pbar:
+                
+                for i, video_url in enumerate(playlist_urls, 1):
+                    try:
+                        print(f"\n{Fore.YELLOW}📹 Descargando video {i}/{len(playlist_urls)} de la playlist{Style.RESET_ALL}")
+                        
+                        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                            # Obtener información del video
+                            try:
+                                info = ydl.extract_info(video_url, download=False)
+                                title = info.get('title', 'Video desconocido')[:50]
+                                print(f"{Fore.GREEN}📹 {i}. {title}{'...' if len(info.get('title', '')) > 50 else ''}{Style.RESET_ALL}")
+                                
+                                # Mostrar formato que se va a descargar
+                                formats = info.get('formats', [])
+                                video_formats = [f for f in formats if f.get('vcodec', 'none') != 'none' and f.get('height')]
+                                audio_formats = [f for f in formats if f.get('acodec', 'none') != 'none' and not f.get('height')]
+                                
+                                if video_formats and audio_formats:
+                                    best_video = max(video_formats, key=lambda x: (x.get('height', 0), x.get('fps', 0)))
+                                    best_audio = max(audio_formats, key=lambda x: x.get('abr', 0) or 0)
+                                    print(f"{Fore.CYAN}  🎥 Video: {best_video.get('height', 'N/A')}p @ {best_video.get('fps', 'N/A')}fps{Style.RESET_ALL}")
+                                    print(f"{Fore.CYAN}  🎵 Audio: {best_audio.get('abr', 'N/A')}kbps{Style.RESET_ALL}")
+                                
+                                # Descargar el video
+                                ydl.download([video_url])
+                                success_count += 1
+                                print(f"{Fore.GREEN}✅ Video {i} descargado exitosamente{Style.RESET_ALL}")
+                                
+                            except Exception as video_error:
+                                if self.progress_bar:
+                                    self.progress_bar.close()
+                                    self.progress_bar = None
+                                failed_videos.append({'index': i, 'url': video_url, 'error': str(video_error)})
+                                print(f"{Fore.RED}❌ Error descargando video {i}: {str(video_error)[:100]}{'...' if len(str(video_error)) > 100 else ''}{Style.RESET_ALL}")
+                    
+                    except Exception as general_error:
+                        if self.progress_bar:
+                            self.progress_bar.close()
+                            self.progress_bar = None
+                        failed_videos.append({'index': i, 'url': video_url, 'error': str(general_error)})
+                        print(f"{Fore.RED}❌ Error general en video {i}: {str(general_error)[:100]}{'...' if len(str(general_error)) > 100 else ''}{Style.RESET_ALL}")
+                    
+                    main_pbar.update(1)
+            
+            # Restaurar directorio original
+            self.download_path = original_path
+            
+            # Mostrar resumen final de la playlist
+            print(f"\n{Fore.CYAN}{'='*70}")
+            print(f"📊 RESUMEN DE DESCARGA DE PLAYLIST")
+            print(f"{'='*70}{Style.RESET_ALL}")
+            print(f"{Fore.YELLOW}📋 Playlist: {Style.RESET_ALL}{playlist_title}")
+            print(f"{Fore.YELLOW}👤 Canal: {Style.RESET_ALL}{uploader}")
+            print(f"{Fore.GREEN}✅ Videos descargados exitosamente: {success_count}/{len(playlist_urls)}{Style.RESET_ALL}")
+            
+            if failed_videos:
+                print(f"{Fore.RED}❌ Videos que fallaron: {len(failed_videos)}{Style.RESET_ALL}")
+                print(f"\n{Fore.YELLOW}📋 Lista de videos fallidos:{Style.RESET_ALL}")
+                for failed in failed_videos[:5]:  # Mostrar solo los primeros 5 errores
+                    print(f"  {failed['index']}. Video #{failed['index']}")
+                    print(f"     💥 Error: {failed['error'][:80]}{'...' if len(failed['error']) > 80 else ''}")
+                
+                if len(failed_videos) > 5:
+                    print(f"  ... y {len(failed_videos) - 5} videos más")
+            
+            if success_count > 0:
+                print(f"\n{Fore.GREEN}🎉 Descarga de playlist completada{Style.RESET_ALL}")
+                print(f"{Fore.CYAN}📁 Videos guardados en: {playlist_dir}{Style.RESET_ALL}")
+                print(f"{Fore.YELLOW}💡 Todos los videos fueron descargados con la mejor calidad disponible{Style.RESET_ALL}")
+                
+                # Calcular porcentaje de éxito
+                success_rate = (success_count / len(playlist_urls)) * 100
+                if success_rate == 100:
+                    print(f"{Fore.GREEN}🏆 ¡Éxito total! Todos los videos descargados{Style.RESET_ALL}")
+                elif success_rate >= 80:
+                    print(f"{Fore.YELLOW}⭐ Descarga exitosa: {success_rate:.1f}% completado{Style.RESET_ALL}")
+                else:
+                    print(f"{Fore.RED}⚠️ Descarga parcial: {success_rate:.1f}% completado{Style.RESET_ALL}")
+            else:
+                print(f"\n{Fore.RED}💥 No se pudo descargar ningún video de la playlist{Style.RESET_ALL}")
+            
+            print(f"{Fore.CYAN}{'='*70}{Style.RESET_ALL}")
+            
+            return success_count > 0
+            
+        except Exception as e:
+            if self.progress_bar:
+                self.progress_bar.close()
+                self.progress_bar = None
+            print(f"{Fore.RED}❌ Error procesando playlist: {str(e)}{Style.RESET_ALL}")
+            
+            # Restaurar directorio original en caso de error
+            if 'original_path' in locals():
+                self.download_path = original_path
+            
+            return False
