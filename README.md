@@ -1,15 +1,6 @@
 # 🎬 YouTube Downloader
 
-Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Python con una interfaz de línea de coma```
-Selecciona una opción (0-9): 5
-📝 Ingresa las URLs (presiona Enter sin texto para terminar):
-URL 1: https://www.youtube.com/watch?v=ejemplo1
-URL 2: https://www.youtube.com/watch?v=ejemplo2
-URL 3:
-
-🎯 Esta opción descarga múltiples videos en máxima calidad (video+audio separados)
-📊 Se usará la mejor calidad disponible para cada video
-¿Continuar con la descarga en máxima calidad? (s/n): sida e interactiva.
+Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Python con una interfaz de línea de comandos
 
 > 💡 **¿Buscas algo más simple?** Tenemos una versión más básica y sencilla disponible en: [https://github.com/GAROS01/YouTube-Download](https://github.com/GAROS01/YouTube-Download)
 
@@ -506,26 +497,9 @@ Si encuentras algún problema, por favor abre un issue con:
 
 - **[YouTube-Download (Simple)](https://github.com/GAROS01/YouTube-Download)** - Versión más básica y directa, ideal para uso rápido y sencillo
 
-## 🔮 Próximas Características
-
-- 🎵 Más formatos de audio (FLAC, AAC, OGG) con selección de bitrate
-- 📱 Interfaz gráfica con controles avanzados de calidad
-- 🌐 Soporte para más plataformas (Vimeo, Dailymotion, etc.)
-- ⚡ Descarga paralela optimizada con múltiples hilos
-- 📊 Estadísticas detalladas de velocidad y rendimiento
-- 🎯 Perfiles de configuración personalizados por tipo de contenido
-- 🔧 Gestión avanzada de formatos y codecs
-- 📑 Descarga de canales completos con filtros de fecha
-- 🔄 Actualización automática de playlists existentes
-
 ---
 
 **Desarrollado por GarosDev** 🚀
 
-_Versión 2025 con descarga de playlists completas, múltiples videos en máxima calidad y compatibilidad mejorada con yt-dlp 2025.6.9_ ✨
+_VibeCoding_
 
-### 🌟 Tres Opciones Para Ti
-
-- **¿Quieres todas las funcionalidades avanzadas?** Usa esta versión completa
-- **¿Prefieres simplicidad?** Prueba nuestra [versión simple](https://github.com/GAROS01/YouTube-Download)
-- **¿Necesitas descargar playlists completas?** Esta versión es perfecta para ti 🔄📑
