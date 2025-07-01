@@ -1,6 +1,15 @@
 # 🎬 YouTube Downloader
 
-Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Python con una interfaz de línea de comandos colorida e interactiva.
+Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Python con una interfaz de línea de coma```
+Selecciona una opción (0-9): 5
+📝 Ingresa las URLs (presiona Enter sin texto para terminar):
+URL 1: https://www.youtube.com/watch?v=ejemplo1
+URL 2: https://www.youtube.com/watch?v=ejemplo2
+URL 3:
+
+🎯 Esta opción descarga múltiples videos en máxima calidad (video+audio separados)
+📊 Se usará la mejor calidad disponible para cada video
+¿Continuar con la descarga en máxima calidad? (s/n): sida e interactiva.
 
 > 💡 **¿Buscas algo más simple?** Tenemos una versión más básica y sencilla disponible en: [https://github.com/GAROS01/YouTube-Download](https://github.com/GAROS01/YouTube-Download)
 
@@ -13,6 +22,7 @@ Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Py
 - 📋 **Información detallada** del video con descripciones extensas
 - 🔄 **Dos motores de descarga**: yt-dlp (recomendado) y pytubefix (actualizado)
 - 📦 **Descarga múltiple** con progreso individual y general
+- 🔄 **Descarga de playlists completas** automática con organización en carpetas
 - 🎨 **Interfaz colorida** con emojis para mejor experiencia de usuario
 - 📁 **Directorio personalizable** de descarga
 - ✅ **Validación robusta** de URLs de YouTube
@@ -98,10 +108,11 @@ El programa presenta un menú interactivo con las siguientes opciones:
 3. **Descargar solo audio (MP3)** - Extrae únicamente el audio a 320kbps 🎵
 4. **Obtener información del video** - Muestra detalles completos sin descargar 📊
 5. **Descargar múltiples videos** - Descarga varios videos en máxima calidad 🎯📦
-6. **Cambiar directorio de descarga** - Personaliza la carpeta destino 📁
-7. **Ver calidades disponibles** - Muestra todas las opciones de calidad 🎥
-8. **Descarga máxima calidad (separar+fusionar)** - Combina mejor video + mejor audio 🎯
-9. **Salir** - Cierra la aplicación 👋
+6. **Descargar playlist completa** - Descarga automática de todas las playlists 🔄📑
+7. **Cambiar directorio de descarga** - Personaliza la carpeta destino 📁
+8. **Ver calidades disponibles** - Muestra todas las opciones de calidad 🎥
+9. **Descarga máxima calidad (separar+fusionar)** - Combina mejor video + mejor audio 🎯
+10. **Salir** - Cierra la aplicación 👋
 
 ### Ejemplo de uso con máxima calidad
 
@@ -113,13 +124,14 @@ El programa presenta un menú interactivo con las siguientes opciones:
 3. Descargar solo audio (MP3) - 320kbps 🎵
 4. Obtener información del video 📊
 5. Descargar múltiples videos - Máxima calidad 🎯📦
-6. Cambiar directorio de descarga 📁
-7. Ver calidades disponibles 🎥
-8. Descarga máxima calidad (separar+fusionar) 🎯
+6. Descargar playlist completa - Automático 🔄📑
+7. Cambiar directorio de descarga 📁
+8. Ver calidades disponibles 🎥
+9. Descarga máxima calidad (separar+fusionar) 🎯
 0. Salir 👋
 =======================================================
 
-Selecciona una opción (0-8): 1
+Selecciona una opción (0-9): 1
 📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
 🎥 Calidades disponibles: best, 2160p, 1440p, 1080p, 720p, 480p, 360p, 240p, worst
 🎬 Calidad [best]: 1080p
@@ -144,7 +156,7 @@ Selecciona una opción (0-8): 5
 � Ingresa las URLs (presiona Enter sin texto para terminar):
 URL 1: https://www.youtube.com/watch?v=ejemplo1
 URL 2: https://www.youtube.com/watch?v=ejemplo2
-URL 3: 
+URL 3:
 
 🎯 Esta opción descarga múltiples videos en máxima calidad (video+audio separados)
 📊 Se usará la mejor calidad disponible para cada video
@@ -180,10 +192,57 @@ URL 3:
 ============================================================
 ```
 
+### Descarga de playlist completa automática
+
+```
+Selecciona una opción (0-9): 6
+📎 Ingresa la URL de la playlist: https://www.youtube.com/playlist?list=PLxxxxxx
+🔄 Esta opción descarga todos los videos de la playlist automáticamente
+📊 Se usará la mejor calidad disponible para cada video
+¿Continuar con la descarga de la playlist? (s/n): s
+
+🔄 Analizando playlist...
+
+📑 Playlist encontrada:
+📋 Título: Python Tutorial Complete Course 2024
+👤 Canal: TechChannel
+🎬 Total de videos: 45
+📁 Los videos se guardarán en: downloads/Python Tutorial Complete Course 2024
+
+🚀 Iniciando descarga de playlist en máxima calidad...
+
+📹 Descargando video 1/45 de la playlist
+📹 1. Introduction to Python Programming...
+  🎥 Video: 1080p @ 30fps
+  🎵 Audio: 320kbps
+📥 Descargando ████████████████████████████████████████ 100%  125.3M/125.3M [2.8MB/s]
+✅ Video 1 descargado exitosamente
+
+📹 Descargando video 2/45 de la playlist
+📹 2. Variables and Data Types...
+  🎥 Video: 1080p @ 30fps
+  🎵 Audio: 320kbps
+📥 Descargando ████████████████████████████████████████ 100%  98.7M/98.7M [3.1MB/s]
+✅ Video 2 descargado exitosamente
+
+============================================================
+📊 RESUMEN DE DESCARGA DE PLAYLIST
+============================================================
+📋 Playlist: Python Tutorial Complete Course 2024
+👤 Canal: TechChannel
+✅ Videos descargados exitosamente: 43/45
+❌ Videos que fallaron: 2
+
+🎉 Descarga de playlist completada
+📁 Videos guardados en: downloads/Python Tutorial Complete Course 2024
+⭐ Descarga exitosa: 95.6% completado
+============================================================
+```
+
 ### Audio en máxima calidad
 
 ```
-Selecciona una opción (0-8): 3
+Selecciona una opción (0-9): 3
 📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
 
 🎵 Descargando audio en máxima calidad (320kbps MP3)...
@@ -197,7 +256,7 @@ Selecciona una opción (0-8): 3
 ### Información de calidades disponibles
 
 ```
-Selecciona una opción (0-8): 7
+Selecciona una opción (0-9): 8
 
 ============================================================
 🎥 CALIDADES Y MÉTODOS DE DESCARGA DISPONIBLES
@@ -237,10 +296,10 @@ Selecciona una opción (0-8): 7
 ============================================================
 ```
 
-### Descarga en máxima calidad (Opción 8)
+### Descarga en máxima calidad (Opción 9)
 
 ```
-Selecciona una opción (0-8): 8
+Selecciona una opción (0-9): 9
 📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
 🎯 Esta opción descarga el mejor video + mejor audio y los combina
 
@@ -292,10 +351,18 @@ Selecciona una opción (0-8): 8
 
 El programa acepta los siguientes formatos de URL de YouTube:
 
+**Videos individuales:**
+
 - `https://www.youtube.com/watch?v=VIDEO_ID`
 - `https://youtu.be/VIDEO_ID`
 - `https://www.youtube.com/embed/VIDEO_ID`
 - `https://www.youtube.com/v/VIDEO_ID`
+
+**Playlists:**
+
+- `https://www.youtube.com/playlist?list=PLAYLIST_ID`
+- `https://www.youtube.com/watch?v=VIDEO_ID&list=PLAYLIST_ID`
+- `https://www.youtube.com/watch?list=PLAYLIST_ID`
 
 ### Formatos de Descarga Mejorados
 
@@ -382,22 +449,25 @@ pip install -e ".[dev]"
   - `download_video()`: Descarga con configuración mejorada de yt-dlp y pytubefix
   - `download_best_quality_separate()`: Máxima calidad separando streams (bestvideo+bestaudio)
   - `download_multiple_videos()`: Descarga múltiple con máxima calidad automática
+  - `download_playlist()`: Descarga automática de playlists completas con organización
   - `progress_hook()`: Sistema de progreso mejorado con información detallada
   - `show_available_qualities()`: Información completa de métodos y calidades
   - `create_download_directory()`: Gestión automática de directorios
 - **VideoInfo**: Información detallada con análisis de calidades
-- **validate_url()**: Validación robusta de URLs de YouTube
-- **format_filename()**: Limpieza de nombres de archivo
+- **validate_url()**: Validación robusta de URLs de YouTube (videos y playlists)
+- **format_filename()**: Limpieza de nombres de archivo y carpetas
 
 ### Nuevas Características Técnicas
 
 - **Configuración de formatos optimizada**: Garantiza máxima calidad con `bestvideo+bestaudio/best`
 - **Descarga múltiple mejorada**: Progreso individual y resumen detallado por video
+- **Descarga de playlists completas**: Extracción automática de todas las URLs con organización en carpetas
 - **Información de streams en tiempo real**: Muestra resolución, fps y bitrate antes de descargar
-- **Gestión robusta de errores**: Manejo individual de fallos en descargas múltiples
+- **Gestión robusta de errores**: Manejo individual de fallos en descargas múltiples y playlists
 - **Progreso visual avanzado**: Barras de progreso con velocidad y tamaño de archivo
 - **Resumen de descargas**: Estadísticas completas de éxito y fallos en descargas múltiples
-- **Configuración automática**: FFmpeg se gestiona automáticamente a través de yt-dlp
+- **Organización automática**: Playlists se guardan en carpetas con nombres descriptivos
+- **Numeración secuencial**: Videos de playlist numerados según su orden original
 
 ## 🎨 Interfaz de Usuario Mejorada
 
@@ -436,6 +506,26 @@ Si encuentras algún problema, por favor abre un issue con:
 
 - **[YouTube-Download (Simple)](https://github.com/GAROS01/YouTube-Download)** - Versión más básica y directa, ideal para uso rápido y sencillo
 
+## 🔮 Próximas Características
+
+- 🎵 Más formatos de audio (FLAC, AAC, OGG) con selección de bitrate
+- 📱 Interfaz gráfica con controles avanzados de calidad
+- 🌐 Soporte para más plataformas (Vimeo, Dailymotion, etc.)
+- ⚡ Descarga paralela optimizada con múltiples hilos
+- 📊 Estadísticas detalladas de velocidad y rendimiento
+- 🎯 Perfiles de configuración personalizados por tipo de contenido
+- 🔧 Gestión avanzada de formatos y codecs
+- 📑 Descarga de canales completos con filtros de fecha
+- 🔄 Actualización automática de playlists existentes
+
+---
 
 **Desarrollado por GarosDev** 🚀
-VibeCoding
+
+_Versión 2025 con descarga de playlists completas, múltiples videos en máxima calidad y compatibilidad mejorada con yt-dlp 2025.6.9_ ✨
+
+### 🌟 Tres Opciones Para Ti
+
+- **¿Quieres todas las funcionalidades avanzadas?** Usa esta versión completa
+- **¿Prefieres simplicidad?** Prueba nuestra [versión simple](https://github.com/GAROS01/YouTube-Download)
+- **¿Necesitas descargar playlists completas?** Esta versión es perfecta para ti 🔄📑
