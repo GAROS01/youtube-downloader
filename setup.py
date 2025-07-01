@@ -18,13 +18,11 @@ setup(
     ],
     extras_require={
         'dev': [
-            'pytest>=7.0.0',
-            'pytest-cov>=4.0.0',
-            'black>=23.0.0',
-            'flake8>=6.0.0',
-        ],
-        'gui': [
-            'tkinter',
+            'pytest>=8.4.1',
+            'pytest-cov>=6.2.1',
+            'black>=25.1.0',
+            'flake8>=7.3.0',
+            'setuptools>=80.9.0',
         ],
     },
     classifiers=[
