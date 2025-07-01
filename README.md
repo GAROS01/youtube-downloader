@@ -237,6 +237,20 @@ Selecciona una opción (0-8): 7
 ============================================================
 ```
 
+### Descarga en máxima calidad (Opción 8)
+
+```
+Selecciona una opción (0-8): 8
+📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
+🎯 Esta opción descarga el mejor video + mejor audio y los combina
+
+🎯 Descarga en máxima calidad (video + audio separados)
+📥 Descargando ████████████████████████████████████████ 100%  512.3M/512.3M [3.2MB/s]
+✅ Descarga completada: Tutorial 4K Ultra HD.mp4
+🎉 Descarga completada exitosamente
+📁 Guardado en: downloads
+```
+
 ## 📦 Dependencias
 
 - **yt-dlp >=2025.6.9** - Motor principal de descarga, más estable y actualizado
@@ -422,38 +436,6 @@ Si encuentras algún problema, por favor abre un issue con:
 
 - **[YouTube-Download (Simple)](https://github.com/GAROS01/YouTube-Download)** - Versión más básica y directa, ideal para uso rápido y sencillo
 
-## 🔮 Próximas Características
-
-- 🔄 Descarga de playlists completas con máxima calidad automática
-- 🎵 Más formatos de audio (FLAC, AAC, OGG) con selección de bitrate
-- 📱 Interfaz gráfica con controles avanzados de calidad
-- 🌐 Soporte para más plataformas (Vimeo, Dailymotion, etc.)
-- ⚡ Descarga paralela optimizada con múltiples hilos
-- 📊 Estadísticas detalladas de velocidad y rendimiento
-- 🎯 Perfiles de configuración personalizados por tipo de contenido
-- 🔧 Gestión avanzada de formatos y codecs
-
----
 
 **Desarrollado por GarosDev** 🚀
-
-_Versión 2025 con descarga en máxima calidad, descargas múltiples optimizadas y compatibilidad mejorada con yt-dlp 2025.6.9_ ✨
-
-### 🌟 Dos Opciones Para Ti
-
-- **¿Quieres todas las funcionalidades?** Usa esta versión avanzada
-- **¿Prefieres simplicidad?** Prueba nuestra [versión simple](https://github.com/GAROS01/YouTube-Download)
-
-### Descarga en máxima calidad (Opción 8)
-
-```
-Selecciona una opción (0-8): 8
-📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
-🎯 Esta opción descarga el mejor video + mejor audio y los combina
-
-🎯 Descarga en máxima calidad (video + audio separados)
-📥 Descargando ████████████████████████████████████████ 100%  512.3M/512.3M [3.2MB/s]
-✅ Descarga completada: Tutorial 4K Ultra HD.mp4
-🎉 Descarga completada exitosamente
-📁 Guardado en: downloads
-```
+VibeCoding
