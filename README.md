@@ -23,10 +23,10 @@ Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Py
 
 ## 🎯 Versiones Disponibles
 
-| Versión | Descripción | Ideal para | Enlace |
-|---------|-------------|------------|--------|
-| **Avanzada** (Esta) | Interfaz completa con múltiples opciones, máxima calidad, barras de progreso avanzadas | Usuarios que quieren todas las funcionalidades | Aquí mismo |
-| **Simple** | Script básico y directo, fácil de usar | Usuarios que prefieren simplicidad | [GitHub - YouTube-Download](https://github.com/GAROS01/YouTube-Download) |
+| Versión             | Descripción                                                                            | Ideal para                                     | Enlace                                                                   |
+| ------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------ |
+| **Avanzada** (Esta) | Interfaz completa con múltiples opciones, máxima calidad, barras de progreso avanzadas | Usuarios que quieren todas las funcionalidades | Aquí mismo                                                               |
+| **Simple**          | Script básico y directo, fácil de usar                                                 | Usuarios que prefieren simplicidad             | [GitHub - YouTube-Download](https://github.com/GAROS01/YouTube-Download) |
 
 ## 📁 Estructura del Proyecto
 
@@ -34,16 +34,14 @@ Un descargador de videos de YouTube moderno y fácil de usar, desarrollado en Py
 youtube-downloader/
 ├── src/
 │   ├── main.py                # Punto de entrada con menú interactivo
-│   ├── Class/
-│   │   ├── downloader.py      # Clase principal para descargas
-│   │   └── info.py            # Clase para obtener información de videos
+│   ├── downloader.py          # Clase principal para descargas con máxima calidad
+│   ├── info_video.py          # Clase para obtener información detallada de videos
 │   └── utils/
 │       └── __init__.py        # Funciones utilitarias (validación, formato)
+├── downloads/                 # Directorio de descargas (creado automáticamente)
 ├── requirements.txt           # Dependencias del proyecto
 ├── setup.py                   # Configuración del paquete
-├── LICENSE                    # Licencia MIT
-├── .gitignore                 # Archivos ignorados por Git
-├── .venv/                     # Entorno virtual (creado localmente)
+├── LICENSE.md                 # Licencia MIT
 └── README.md                  # Documentación del proyecto
 ```
 
@@ -99,11 +97,11 @@ El programa presenta un menú interactivo con las siguientes opciones:
 2. **Descargar video (pytubefix)** - Método alternativo rápido 🚀
 3. **Descargar solo audio (MP3)** - Extrae únicamente el audio a 320kbps 🎵
 4. **Obtener información del video** - Muestra detalles completos sin descargar 📊
-5. **Descargar múltiples videos** - Descarga varios videos con progreso general 📦
+5. **Descargar múltiples videos** - Descarga varios videos en máxima calidad 🎯📦
 6. **Cambiar directorio de descarga** - Personaliza la carpeta destino 📁
 7. **Ver calidades disponibles** - Muestra todas las opciones de calidad 🎥
 8. **Descarga máxima calidad (separar+fusionar)** - Combina mejor video + mejor audio 🎯
-0. **Salir** - Cierra la aplicación 👋
+9. **Salir** - Cierra la aplicación 👋
 
 ### Ejemplo de uso con máxima calidad
 
@@ -114,7 +112,7 @@ El programa presenta un menú interactivo con las siguientes opciones:
 2. Descargar video (pytubefix) - Rápido 🚀
 3. Descargar solo audio (MP3) - 320kbps 🎵
 4. Obtener información del video 📊
-5. Descargar múltiples videos 📦
+5. Descargar múltiples videos - Máxima calidad 🎯📦
 6. Cambiar directorio de descarga 📁
 7. Ver calidades disponibles 🎥
 8. Descarga máxima calidad (separar+fusionar) 🎯
@@ -139,19 +137,47 @@ Selecciona una opción (0-8): 1
 📁 Guardado en: downloads
 ```
 
-### Descarga en máxima calidad (Opción 8)
+### Descarga múltiple en máxima calidad
 
 ```
-Selecciona una opción (0-8): 8
-📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
-🎯 Esta opción descarga el mejor video + mejor audio y los combina
+Selecciona una opción (0-8): 5
+� Ingresa las URLs (presiona Enter sin texto para terminar):
+URL 1: https://www.youtube.com/watch?v=ejemplo1
+URL 2: https://www.youtube.com/watch?v=ejemplo2
+URL 3: 
 
-🎯 Descarga en máxima calidad (video + audio separados)
-📥 Descargando ████████████████████████████████████████ 100%  512.3M/512.3M [3.2MB/s]
-🔧 Fusionando streams con FFmpeg...
-✅ Descarga completada: Tutorial 4K Ultra HD.mp4
-🎉 Descarga completada exitosamente
-📁 Guardado en: downloads
+🎯 Esta opción descarga múltiples videos en máxima calidad (video+audio separados)
+📊 Se usará la mejor calidad disponible para cada video
+¿Continuar con la descarga en máxima calidad? (s/n): s
+
+📦 Descargando 2 videos en máxima calidad...
+🎯 Usando configuración de máxima calidad (video+audio separados)
+
+📹 Descargando video 1/2 en máxima calidad
+� URL: https://www.youtube.com/watch?v=ejemplo1
+📹 Título: Tutorial completo de Python 2024...
+  🎥 Video: 1080p @ 30fps
+  🎵 Audio: 320kbps
+�📥 Descargando ████████████████████████████████████████ 100%  245.8M/245.8M [2.4MB/s]
+✅ Video 1 descargado exitosamente
+
+📹 Descargando video 2/2 en máxima calidad
+🔗 URL: https://www.youtube.com/watch?v=ejemplo2
+📹 Título: JavaScript avanzado...
+  🎥 Video: 1440p @ 60fps
+  🎵 Audio: 320kbps
+📥 Descargando ████████████████████████████████████████ 100%  892.3M/892.3M [3.1MB/s]
+✅ Video 2 descargado exitosamente
+
+============================================================
+📊 RESUMEN DE DESCARGA MÚLTIPLE
+============================================================
+✅ Videos descargados exitosamente: 2/2
+
+🎉 Descarga completada con máxima calidad
+📁 Videos guardados en: downloads
+💡 Todos los videos fueron descargados con la mejor calidad disponible (video+audio combinados)
+============================================================
 ```
 
 ### Audio en máxima calidad
@@ -213,12 +239,12 @@ Selecciona una opción (0-8): 7
 
 ## 📦 Dependencias
 
-- **yt-dlp** - Motor principal de descarga, más estable
-- **pytubefix** - Motor alternativo actualizado (reemplaza pytube)
-- **requests** - Peticiones HTTP
-- **colorama** - Colores en terminal
-- **tqdm** - Barras de progreso avanzadas con velocidad y tiempo estimado
-- **FFmpeg** - Fusión de streams de video y audio (se instala automáticamente)
+- **yt-dlp >=2025.6.9** - Motor principal de descarga, más estable y actualizado
+- **pytubefix >=8.8.4** - Motor alternativo actualizado (reemplaza pytube)
+- **requests >=2.31.0** - Peticiones HTTP
+- **colorama >=0.4.6** - Colores en terminal
+- **tqdm >=4.67.1** - Barras de progreso avanzadas con velocidad y tiempo estimado
+- **FFmpeg** - Fusión de streams de video y audio (se instala automáticamente por yt-dlp)
 
 ## 🎨 Características Visuales
 
@@ -339,22 +365,25 @@ pip install -e ".[dev]"
 ### Estructura de clases actualizadas
 
 - **Downloader**: Clase principal con métodos de máxima calidad
-  - `download_video()`: Descarga con configuración mejorada
-  - `download_best_quality_separate()`: Máxima calidad separando streams
-  - `_get_format_selector_improved()`: Selección optimizada de formatos
-  - `_show_selected_formats()`: Información de formatos a descargar
-  - `_check_ffmpeg()`: Verificación de FFmpeg
+  - `download_video()`: Descarga con configuración mejorada de yt-dlp y pytubefix
+  - `download_best_quality_separate()`: Máxima calidad separando streams (bestvideo+bestaudio)
+  - `download_multiple_videos()`: Descarga múltiple con máxima calidad automática
+  - `progress_hook()`: Sistema de progreso mejorado con información detallada
+  - `show_available_qualities()`: Información completa de métodos y calidades
+  - `create_download_directory()`: Gestión automática de directorios
 - **VideoInfo**: Información detallada con análisis de calidades
-- **validate_url()**: Validación robusta de URLs
+- **validate_url()**: Validación robusta de URLs de YouTube
 - **format_filename()**: Limpieza de nombres de archivo
 
 ### Nuevas Características Técnicas
 
-- **Configuración de formatos mejorada**: Garantiza máxima calidad
-- **Detección automática de FFmpeg**: Verifica capacidades de fusión
-- **Información de streams**: Muestra qué se descargará exactamente
-- **Fallback inteligente**: Múltiples opciones de respaldo
-- **Progreso detallado**: Información de cada fase del proceso
+- **Configuración de formatos optimizada**: Garantiza máxima calidad con `bestvideo+bestaudio/best`
+- **Descarga múltiple mejorada**: Progreso individual y resumen detallado por video
+- **Información de streams en tiempo real**: Muestra resolución, fps y bitrate antes de descargar
+- **Gestión robusta de errores**: Manejo individual de fallos en descargas múltiples
+- **Progreso visual avanzado**: Barras de progreso con velocidad y tamaño de archivo
+- **Resumen de descargas**: Estadísticas completas de éxito y fallos en descargas múltiples
+- **Configuración automática**: FFmpeg se gestiona automáticamente a través de yt-dlp
 
 ## 🎨 Interfaz de Usuario Mejorada
 
@@ -382,12 +411,12 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 Si encuentras algún problema, por favor abre un issue con:
 
-- Descripción del problema
-- URL del video
+- URL del video que falla
 - Calidad solicitada
-- Método de descarga utilizado
-- Estado de FFmpeg (si aplica)
+- Método de descarga utilizado (yt-dlp o pytubefix)
 - Mensaje de error completo
+- Información del sistema operativo
+- Versión de yt-dlp/pytubefix instalada
 
 ## 🔗 Proyectos Relacionados
 
@@ -395,22 +424,36 @@ Si encuentras algún problema, por favor abre un issue con:
 
 ## 🔮 Próximas Características
 
-- 🔄 Descarga de playlists completas con máxima calidad
-- 🎵 Más formatos de audio (FLAC, AAC, OGG)
-- 📱 Interfaz gráfica con control de calidad
-- 🌐 Soporte para más plataformas
-- ⚡ Descarga paralela con múltiples hilos
-- 📊 Estadísticas de calidad y velocidad
-- 🎯 Configuraciones personalizadas de calidad
-- 🔧 Instalación automática de FFmpeg
+- 🔄 Descarga de playlists completas con máxima calidad automática
+- 🎵 Más formatos de audio (FLAC, AAC, OGG) con selección de bitrate
+- 📱 Interfaz gráfica con controles avanzados de calidad
+- 🌐 Soporte para más plataformas (Vimeo, Dailymotion, etc.)
+- ⚡ Descarga paralela optimizada con múltiples hilos
+- 📊 Estadísticas detalladas de velocidad y rendimiento
+- 🎯 Perfiles de configuración personalizados por tipo de contenido
+- 🔧 Gestión avanzada de formatos y codecs
 
 ---
 
 **Desarrollado por GarosDev** 🚀
 
-_Ahora con descarga en máxima calidad combinando video y audio por separado para obtener la mejor experiencia posible_ ✨
+_Versión 2025 con descarga en máxima calidad, descargas múltiples optimizadas y compatibilidad mejorada con yt-dlp 2025.6.9_ ✨
 
 ### 🌟 Dos Opciones Para Ti
 
 - **¿Quieres todas las funcionalidades?** Usa esta versión avanzada
 - **¿Prefieres simplicidad?** Prueba nuestra [versión simple](https://github.com/GAROS01/YouTube-Download)
+
+### Descarga en máxima calidad (Opción 8)
+
+```
+Selecciona una opción (0-8): 8
+📎 Ingresa la URL del video: https://www.youtube.com/watch?v=ejemplo
+🎯 Esta opción descarga el mejor video + mejor audio y los combina
+
+🎯 Descarga en máxima calidad (video + audio separados)
+📥 Descargando ████████████████████████████████████████ 100%  512.3M/512.3M [3.2MB/s]
+✅ Descarga completada: Tutorial 4K Ultra HD.mp4
+🎉 Descarga completada exitosamente
+📁 Guardado en: downloads
+```
