@@ -1,4 +1,4 @@
-# 🎬 YouTube Downloader Pro
+# 🎬 YouTube Downloader
 
 Un descargador de videos de YouTube profesional con interfaz de línea de comandos, optimizado para obtener la máxima calidad disponible.
 
@@ -55,7 +55,7 @@ youtube-downloader/
 
 ```powershell
 # Clonar el repositorio
-git clone <url-del-repositorio>
+git clone https://github.com/GAROS01/youtube-downloader.git
 cd youtube-downloader
 
 # Crear e instalar automáticamente
@@ -69,7 +69,7 @@ pip install -r requirements.txt
 **1. Descargar/Clonar el proyecto:**
 
 ```powershell
-git clone <url-del-repositorio>
+git clone https://github.com/GAROS01/youtube-downloader.git
 cd youtube-downloader
 ```
 
@@ -108,8 +108,7 @@ pip install -r requirements.txt
 ## ⚡ Inicio Rápido
 
 ```powershell
-cd src
-python main.py
+python src/main.py
 ```
 
 El programa se iniciará con un menú interactivo que te guiará paso a paso.
@@ -603,7 +602,7 @@ Soluciones:
 
 ```powershell
 # Clonar repositorio
-git clone <url-del-repositorio>
+git clone https://github.com/GAROS01/youtube-downloader.git
 cd youtube-downloader
 
 # Configurar entorno de desarrollo
@@ -615,26 +614,13 @@ pip install -r requirements.txt
 pip install black flake8 pytest
 ```
 
-### 📋 Roadmap de Funcionalidades
-
-**🎯 Próximas versiones:**
-
-- [ ] **GUI opcional**: Interfaz gráfica con tkinter/PyQt
-- [ ] **Descarga programada**: Scheduler para descargas automáticas
-- [ ] **Subtítulos automáticos**: Descarga de subtítulos en múltiples idiomas
-- [ ] **Conversión de formatos**: MP4 a AVI, MKV, etc.
-- [ ] **Integración con bases de datos**: SQLite para historial de descargas
-- [ ] **API REST**: Endpoint para integración con otras aplicaciones
-- [ ] **Docker**: Contenedor para deploy fácil
-- [ ] **Configuración personalizada**: Archivo config.json
-
 ### 🤝 Cómo Contribuir
 
 **1. Fork y Clone:**
 
 ```powershell
 git fork <repositorio>
-git clone https://github.com/tu-usuario/youtube-downloader.git
+git clone https://github.com/GAROS01/youtube-downloader.git
 ```
 
 **2. Crear rama de feature:**
@@ -747,17 +733,6 @@ Al reportar problemas, incluye:
 - **GitHub Discussions**: Para preguntas y discusiones
 - **Pull Requests**: Para contribuciones de código
 
-## 📊 Estadísticas del Proyecto
-
-| Métrica              | Valor              |
-| -------------------- | ------------------ |
-| **Líneas de código** | ~800 líneas        |
-| **Archivos fuente**  | 4 módulos          |
-| **Dependencias**     | 5 packages         |
-| **Compatibilidad**   | Python 3.8+        |
-| **Plataformas**      | Windows/Mac/Linux  |
-| **Calidad máxima**   | 4K + Audio 320kbps |
-
 ---
 
 ## 🎉 Agradecimientos
@@ -766,7 +741,6 @@ Al reportar problemas, incluye:
 
 - **GarosDev** - Desarrollo principal y arquitectura
 - **Comunidad Open Source** - Librerías y herramientas
-- **Usuarios Beta** - Testing y feedback
 
 ### �️ Tecnologías Utilizadas
 
